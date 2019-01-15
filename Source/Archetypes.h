@@ -25,6 +25,7 @@ class GameObject;
 class SpriteSource;
 class Mesh;
 class Tilemap;
+class SpriteText;
 
 namespace Archetypes
 {
@@ -58,7 +59,7 @@ namespace Archetypes
 	//   spriteSource = The sprite source to use for the object.
 	// Returns:
 	//	 A pointer to the newly constructed game object
-	GameObject* CreateMonkey(Mesh* mesh, SpriteSource* spriteSource);
+	GameObject* CreatePlayer(Mesh* mesh, SpriteSource* spriteSource);
 
 	// Create the circle game object.
 	// Params:
@@ -91,6 +92,14 @@ namespace Archetypes
 	// Returns:
 	//   A pointer to the newly constructed game object.
 	GameObject* CreateTilemapObject(Mesh* mesh, SpriteSource* spriteSource, Tilemap* map);
+
+	// Create a text game object.
+	// Params:
+	//   mesh  = The mesh to use for the object's sprite.
+	//   spriteSource = The sprite source to use for the object.
+	// Returns:
+	//	 A pointer to the newly constructed game object.
+	GameObject* CreateText();
 }
 
 //----------------------------------------------------------------------------

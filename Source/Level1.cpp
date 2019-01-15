@@ -17,29 +17,25 @@
 
 #include "Level1.h"
 
-#include <iostream>
-
 // Systems
-#include "Level.h"
 #include <Engine.h>
 #include "Space.h"
 #include "MeshHelper.h"
-#include <Color.h>
+#include <Mesh.h>
+#include "SpriteSource.h"
+#include <Texture.h>
 #include <Input.h>
 #include "Archetypes.h"
-#include <System.h>
 #include <glfw3.h>
-#include "SoundManager.h"
+#include "Tilemap.h"
+#include <Graphics.h>
 
 // Components
-#include <Mesh.h>
 #include "Sprite.h"
+#include "Animation.h"
 #include "Transform.h"
 #include "Physics.h"
-
-// Levels
-#include "Level2.h"
-#include "Level3.h"
+#include "SpriteText.h"
 
 //------------------------------------------------------------------------------
 
@@ -53,51 +49,76 @@ namespace Levels
 	// Public Functions:
 	//------------------------------------------------------------------------------
 
-	// Creates an instance of Level 1.
-	Level1::Level1() : Level("Level1"), meshShip(nullptr), meshBullet(nullptr)
+	// Creates an instance of Level 2.
+	Level1::Level1() : Level("Level1"), meshMonkey(nullptr), textureMonkey(nullptr), spriteSourceMonkey(nullptr),
+		columnsMonkey(3), rowsMonkey(5), 
+		dataMap(nullptr), textureMap(nullptr), spriteSourceMap(nullptr), meshMap(nullptr),
+		columnsMap(4), rowsMap(3)
 	{
 	}
 
-	// Load the resources associated with Level 1.
+	// Load the resources associated with Level 2.
 	void Level1::Load()
 	{
-		std::cout << "Level1::Load" << std::endl;
+		// Create a new quad mesh for the sprite.
+		meshMonkey = CreateQuadMesh(Vector2D(1.0f / columnsMonkey, 1.0f / rowsMonkey), Vector2D(0.5f, 0.5f));
 
-		// Load sound effects.
-		soundManager = Engine::GetInstance().GetModule<SoundManager>();
-		soundManager->AddMusic("Asteroid_Field.mp3");
-		soundManager->AddEffect("teleport.wav");
-		soundManager->AddBank("Master Bank.strings.bank");
-		soundManager->AddBank("Master Bank.bank");
+		// Load the player texture.
+		textureMonkey = Texture::CreateTextureFromFile("Monkey.png");
 
-		// Create a new triangle mesh for the ship.
-		meshShip = CreateTriangleMesh(Color(1.0f, 0.0f, 0.0f, 1.0f), Color(0.0f, 1.0f, 0.0f, 1.0f), Color(0.0f, 0.0f, 1.0f, 1.0f));
-		
-		// Create a new quad mesh for the bullet.
-		meshBullet = CreateQuadMesh(Vector2D(), Vector2D(0.5f, 0.5f));
-		
-		// Create the bullet archetype and add it to the object manager.
-		GameObject* bullet = Archetypes::CreateBulletArchetype(meshBullet);
-		GetSpace()->GetObjectManager().AddArchetype(*bullet);
+		// Setup the player sprite source.
+		spriteSourceMonkey = new SpriteSource(columnsMonkey, rowsMonkey, textureMonkey);
+
+		// Load the tilemap.
+		dataMap = Tilemap::CreateTilemapFromFile("Assets/Levels/Level1.txt");
+		if (dataMap == nullptr)
+		{
+			std::cout << "Error loading map!" << std::endl;
+		}
+		else
+		{
+			// Create a new quad mesh for the sprite tilemap.
+			meshMap = CreateQuadMesh(Vector2D(1.0f / columnsMap, 1.0f / rowsMap), Vector2D(0.5f, 0.5f));
+
+			// Load the tilemap texture.
+			textureMap = Texture::CreateTextureFromFile("Tilemap.png");
+
+			// Setup the tilemap sprite source.
+			spriteSourceMap = new SpriteSource(columnsMap, rowsMap, textureMap);
+		}
+
+		// Set the background color to black.
+		Graphics::GetInstance().SetBackgroundColor(Colors::Black);
 	}
 
-	// Initialize the memory associated with Level 1.
+	// Initialize the memory associated with Level 2.
 	void Level1::Initialize()
 	{
-		std::cout << "Level1::Initialize" << std::endl;
+		GameObjectManager& objectManager = GetSpace()->GetObjectManager();
+		
+		// Add archetypes to the object manager.
+		objectManager.AddArchetype(*Archetypes::CreatePlayer(meshMonkey, spriteSourceMonkey));
+		objectManager.AddArchetype(*Archetypes::CreateText());
 
-		// Create the player ship and add it to the object manager.
-		GameObject* ship = Archetypes::CreateShip(meshShip);
-		GetSpace()->GetObjectManager().AddObject(*ship);
+		// Create the player and add it to the object manager.
+		GameObject* player = new GameObject(*objectManager.GetArchetypeByName("Player"));
+		objectManager.AddObject(*player);
 
-		// Enable fancy OpenGL smoothing/antialiasing for this level.
-		glEnable(GL_LINE_SMOOTH);
-		glEnable(GL_POLYGON_SMOOTH);
-		glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
-		glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
+		// Create test text and add it to the object manager.
+		GameObject* text = new GameObject(*objectManager.GetArchetypeByName("Text"));
+		static_cast<SpriteText*>(text->GetComponent("SpriteText"))->SetText("sicko mode");
+		static_cast<Transform*>(text->GetComponent("Transform"))->SetTranslation(Vector2D(50.0f, 50.0f));
+		objectManager.AddObject(*text);
 
-		// Play background music.
-		musicChannel = soundManager->PlaySound("Asteroid Field");
+		// Play the player's animation.
+		static_cast<Animation*>(player->GetComponent("Animation"))->Play(0, 8, 0.2f, true);
+
+		if (dataMap != nullptr)
+		{
+			// Create the tilemap and add it to the object manager.
+			GameObject* tilemap = Archetypes::CreateTilemapObject(meshMap, spriteSourceMap, dataMap);
+			objectManager.AddObject(*tilemap);
+		}
 	}
 
 	// Update Level 1.
@@ -106,55 +127,27 @@ namespace Levels
 	void Level1::Update(float dt)
 	{
 		UNREFERENCED_PARAMETER(dt);
-		
-		// Count the number of bullets.
-		int numBullets = GetSpace()->GetObjectManager().GetObjectCount("Bullet");
-
-		// Print the number of bullets to a string and set it as the window title.
-		sprintf_s(windowTitle, titleStringLength, "Bullets: %i", numBullets);
-		System::GetInstance().SetWindowTitle(windowTitle);
 
 		Input& input = Input::GetInstance();
-
-		// Play the teleport sound when the T key is pressed.
-		if (input.CheckTriggered('T'))
-		{
-			soundManager->PlaySound("teleport.wav");
-		}
 
 		// Handle level switching.
 		if (input.CheckTriggered('1'))
 		{
 			GetSpace()->RestartLevel();
 		}
-		else if (input.CheckTriggered('2'))
-		{
-			GetSpace()->SetLevel(new Levels::Level2());
-		}
-		else if (input.CheckTriggered('3'))
-		{
-			GetSpace()->SetLevel(new Levels::Level3());
-		}
 	}
 
-	// Destroy objects associated with level 1.
-	void Level1::Shutdown()
-	{
-		// Stop background music.
-		musicChannel->stop();
-	}
-
-	// Unload the resources associated with Level 1.
+	// Unload the resources associated with Level 2.
 	void Level1::Unload()
 	{
-		std::cout << "Level1::Unload" << std::endl;
-
 		// Free all allocated memory.
-		delete meshShip;
-		delete meshBullet;
-
-		// Unload all sounds.
-		soundManager->Shutdown();
+		delete spriteSourceMap;
+		delete textureMap;
+		delete meshMap;
+		delete dataMap;
+		delete spriteSourceMonkey;
+		delete textureMonkey;
+		delete meshMonkey;
 	}
 }
 

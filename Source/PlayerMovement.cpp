@@ -1,6 +1,6 @@
 //------------------------------------------------------------------------------
 //
-// File Name:	MonkeyMovement.cpp
+// File Name:	PlayerMovement.cpp
 // Author(s):	David Cohen (david.cohen)
 // Project:		BetaFramework
 // Course:		WANIC VGP2 2018-2019
@@ -15,7 +15,7 @@
 
 #include "stdafx.h"
 
-#include "MonkeyMovement.h"
+#include "PlayerMovement.h"
 
 // Systems
 #include "GameObject.h"
@@ -47,8 +47,8 @@ namespace Behaviors
 	//   collision = Which sides the monkey collided on.
 	void MonkeyMapCollisionHandler(GameObject& object, const MapCollision& collision)
 	{
-		// Get the MonkeyMovement component.
-		MonkeyMovement* monkeyMovement = static_cast<MonkeyMovement*>(object.GetComponent("MonkeyMovement"));
+		// Get the PlayerMovement component.
+		PlayerMovement* monkeyMovement = static_cast<PlayerMovement*>(object.GetComponent("PlayerMovement"));
 
 		// If the monkey's collider is colliding on the bottom, mark the monkey as on ground.
 		if (collision.bottom)
@@ -84,7 +84,7 @@ namespace Behaviors
 	}
 
 	// Constructor
-	MonkeyMovement::MonkeyMovement() : Component("MonkeyMovement"), monkeyWalkSpeed(300.0f), monkeyJumpSpeed(800.0f),
+	PlayerMovement::PlayerMovement() : Component("PlayerMovement"), monkeyWalkSpeed(300.0f), monkeyJumpSpeed(800.0f),
 		gravity(0.0f, -1200.0f), terminalVelocity(700.0f), gracePeriod(0.15f),
 		transform(nullptr), physics(nullptr),
 		onGround(false), hasJumped(false), airTime(0.0f), movementLerp(0.998f)
@@ -94,13 +94,13 @@ namespace Behaviors
 	// Clone a component and return a pointer to the cloned component.
 	// Returns:
 	//   A pointer to a dynamically allocated clone of the component.
-	Component* MonkeyMovement::Clone() const
+	Component* PlayerMovement::Clone() const
 	{
-		return new MonkeyMovement(*this);
+		return new PlayerMovement(*this);
 	}
 
 	// Initialize this component (happens at object creation).
-	void MonkeyMovement::Initialize()
+	void PlayerMovement::Initialize()
 	{
 		// Store the required components for ease of access.
 		transform = static_cast<Transform*>(GetOwner()->GetComponent("Transform"));
@@ -118,7 +118,7 @@ namespace Behaviors
 	// Fixed update function for this component.
 	// Params:
 	//   dt = The (fixed) change in time since the last step.
-	void MonkeyMovement::Update(float dt)
+	void PlayerMovement::Update(float dt)
 	{
 		UNREFERENCED_PARAMETER(dt);
 
@@ -134,7 +134,7 @@ namespace Behaviors
 	//------------------------------------------------------------------------------
 
 	// Moves horizontally based on input
-	void MonkeyMovement::MoveHorizontal(float dt) const
+	void PlayerMovement::MoveHorizontal(float dt) const
 	{
 		Input& input = Input::GetInstance();
 
@@ -164,7 +164,7 @@ namespace Behaviors
 	}
 
 	// Moves vertically based on input
-	void MonkeyMovement::MoveVertical(float dt)
+	void PlayerMovement::MoveVertical(float dt)
 	{
 		Input& input = Input::GetInstance();
 

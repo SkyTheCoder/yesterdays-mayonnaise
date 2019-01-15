@@ -18,9 +18,6 @@
     <ClCompile Include="Source\stdafx.cpp">
       <Filter>Precompiled</Filter>
     </ClCompile>
-    <ClCompile Include="Source\MonkeyMovement.cpp">
-      <Filter>Game\Behaviors</Filter>
-    </ClCompile>
     <ClCompile Include="Source\PlayerShip.cpp">
       <Filter>Game\Behaviors</Filter>
     </ClCompile>
@@ -29,15 +26,6 @@
     </ClCompile>
     <ClCompile Include="Source\Archetypes.cpp">
       <Filter>Game</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Level2.cpp">
-      <Filter>Game\Levels</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Level1.cpp">
-      <Filter>Game\Levels</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Level3.cpp">
-      <Filter>Game\Levels</Filter>
     </ClCompile>
     <ClCompile Include="Source\ColorChange.cpp">
       <Filter>Game\Behaviors</Filter>
@@ -49,13 +37,22 @@
       <Filter>Game\Behaviors</Filter>
     </ClCompile>
     <ClCompile Include="Source\Main.cpp" />
+    <ClCompile Include="Source\PlayerMovement.cpp">
+      <Filter>Game\Behaviors</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Level1.cpp">
+      <Filter>Game\Levels</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SpriteText.cpp">
+      <Filter>Game\Behaviors</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\CameraFollow.cpp">
+      <Filter>Game\Behaviors</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\stdafx.h">
       <Filter>Precompiled</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\MonkeyMovement.h">
-      <Filter>Game\Behaviors</Filter>
     </ClInclude>
     <ClInclude Include="Source\PlayerShip.h">
       <Filter>Game\Behaviors</Filter>
@@ -66,15 +63,6 @@
     <ClInclude Include="Source\Archetypes.h">
       <Filter>Game</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Level2.h">
-      <Filter>Game\Levels</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Level1.h">
-      <Filter>Game\Levels</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Level3.h">
-      <Filter>Game\Levels</Filter>
-    </ClInclude>
     <ClInclude Include="Source\ColorChange.h">
       <Filter>Game\Behaviors</Filter>
     </ClInclude>
@@ -82,6 +70,18 @@
       <Filter>Game\Behaviors</Filter>
     </ClInclude>
     <ClInclude Include="Source\MonkeyAnimation.h">
+      <Filter>Game\Behaviors</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PlayerMovement.h">
+      <Filter>Game\Behaviors</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Level1.h">
+      <Filter>Game\Levels</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SpriteText.h">
+      <Filter>Game\Behaviors</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CameraFollow.h">
       <Filter>Game\Behaviors</Filter>
     </ClInclude>
   </ItemGroup>

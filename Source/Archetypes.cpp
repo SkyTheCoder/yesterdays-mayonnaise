@@ -29,7 +29,7 @@
 #include "Physics.h"
 #include "PlayerShip.h"
 #include "TimedDeath.h"
-#include "MonkeyMovement.h"
+#include "PlayerMovement.h"
 #include "Animation.h"
 #include "ColliderPoint.h"
 #include "ColliderCircle.h"
@@ -39,6 +39,8 @@
 #include "SpriteTilemap.h"
 #include "ColliderTilemap.h"
 #include "MonkeyAnimation.h"
+#include "SpriteText.h"
+#include "CameraFollow.h"
 
 //------------------------------------------------------------------------------
 
@@ -106,42 +108,45 @@ namespace Archetypes
 		return bullet;
 	}
 
-	// Create the monkey game object.
+	// Create the player game object.
 	// Params:
 	//   mesh  = The mesh to use for the object's sprite.
 	//   spriteSource = The sprite source to use for the object.
 	// Returns:
 	//	 A pointer to the newly constructed game object
-	GameObject* CreateMonkey(Mesh* mesh, SpriteSource* spriteSource)
+	GameObject* CreatePlayer(Mesh* mesh, SpriteSource* spriteSource)
 	{
 		// Create a new game object.
-		GameObject* monkey = new GameObject("Monkey");
+		GameObject* player = new GameObject("Player");
 
 		// Create a new transform.
-		monkey->AddComponent(new Transform(Vector2D(), Vector2D(100.0f, 100.0f)));
+		player->AddComponent(new Transform(Vector2D(), Vector2D(100.0f, 100.0f)));
 
 		// Create a new sprite.
 		Sprite* sprite = new Sprite();
 		sprite->SetMesh(mesh);
 		sprite->SetSpriteSource(spriteSource);
-		monkey->AddComponent(sprite);
+		player->AddComponent(sprite);
 
 		// Create a new physics.
-		monkey->AddComponent(new Physics());
+		player->AddComponent(new Physics());
 
 		// Create a new rectangle collider.
-		monkey->AddComponent(new ColliderRectangle(Vector2D(49.99f, 49.99f)));
+		player->AddComponent(new ColliderRectangle(Vector2D(49.99f, 49.99f)));
 
 		// Create a new animation.
-		monkey->AddComponent(new Animation());
+		player->AddComponent(new Animation());
 
-		// Create a new monkey movement.
-		monkey->AddComponent(new Behaviors::MonkeyMovement());
+		// Create a new player movement.
+		player->AddComponent(new Behaviors::PlayerMovement());
 
 		// Create a new MonkeyAnimation.
-		monkey->AddComponent(new Behaviors::MonkeyAnimation(0, 8, 9, 12));
+		player->AddComponent(new Behaviors::MonkeyAnimation(0, 8, 9, 12));
 
-		return monkey;
+		// Create a new CameraFollow.
+		player->AddComponent(new Behaviors::CameraFollow(Vector2D(100.0f, 25.0f)));
+
+		return player;
 	}
 
 	// Create the circle game object.
@@ -278,6 +283,31 @@ namespace Archetypes
 		tilemap->AddComponent(colliderTilemap);
 
 		return tilemap;
+	}
+
+	// Create a text game object.
+	// Params:
+	//   mesh  = The mesh to use for the object's sprite.
+	//   spriteSource = The sprite source to use for the object.
+	// Returns:
+	//	 A pointer to the newly constructed game object.
+	GameObject* CreateText()
+	{
+		// Create a new game object.
+		GameObject* text = new GameObject("Text");
+
+		// Create a new transform.
+		Transform* transform = new Transform(0.0f, 0.0f);
+		transform->SetScale(Vector2D(64.0f, 64.0f));
+		text->AddComponent(transform);
+
+		// Create a new sprite text.
+		SpriteText* spriteText = new SpriteText();
+		spriteText->SetHorizontalAlignment(SpriteText::Alignment::CENTER);
+		spriteText->SetVerticalAlignment(SpriteText::Alignment::CENTER);
+		text->AddComponent(spriteText);
+
+		return text;
 	}
 }
 

@@ -1,6 +1,6 @@
 //------------------------------------------------------------------------------
 //
-// File Name:	MonkeyMovement.h
+// File Name:	PlayerMovement.h
 // Author(s):	Jeremy Kings (j.kings)
 // Project:		BetaFramework
 // Course:		WANIC VGP2 2018-2019
@@ -38,7 +38,7 @@ namespace Behaviors
 {
 	class MonkeyAnimation;
 
-	class MonkeyMovement : public Component
+	class PlayerMovement : public Component
 	{
 	public:
 		//------------------------------------------------------------------------------
@@ -46,7 +46,7 @@ namespace Behaviors
 		//------------------------------------------------------------------------------
 
 		// Constructor
-		MonkeyMovement();
+		PlayerMovement();
 
 		// Clone a component and return a pointer to the cloned component.
 		// Returns:
