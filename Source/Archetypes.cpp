@@ -309,6 +309,36 @@ namespace Archetypes
 
 		return text;
 	}
+
+	// Create a collectible archetype
+	// Params:
+	//   mesh = The mesh to use for the sprite.
+	//   spriteSource = The sprite source to use for the sprite.
+	// Returns:
+	//   A pointer to the newly constructed game archetype.
+	GameObject* CreateCollectibleArchetype(Mesh* mesh, SpriteSource* spriteSource)
+	{
+		GameObject* Collectible = new GameObject("Collectible");
+
+		// Create transform
+		Transform* transform = new Transform();
+		transform->SetScale(Vector2D(75.0f, 75.0f));
+
+		// Create sprite
+		Sprite* sprite = new Sprite();
+		sprite->SetMesh(mesh);
+		sprite->SetSpriteSource(spriteSource);
+
+		// Create collider
+		ColliderRectangle* colliderrect = new ColliderRectangle(transform->GetScale() / 2.0f);
+
+		// Add components
+		Collectible->AddComponent(transform);
+		Collectible->AddComponent(sprite);
+		Collectible->AddComponent(colliderrect);
+
+		return Collectible;
+	}
 }
 
 //----------------------------------------------------------------------------
