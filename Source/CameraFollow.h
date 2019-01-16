@@ -1,8 +1,8 @@
 //------------------------------------------------------------------------------
 //
-// File Name:	MonkeyAnimation.h
-// Author(s):	Jeremy Kings (j.kings)
-// Project:		BetaFramework
+// File Name:	CameraFollow.h
+// Author(s):	David Cohen (david.cohen)
+// Project:		Cookie Manor
 // Course:		WANIC VGP2 2018-2019
 //
 // Copyright © 2018 DigiPen (USA) Corporation.
@@ -17,7 +17,7 @@
 
 #include "Component.h" // base class
 
-#include <Vector2D.h> // Vector2D
+#include <Vector2D.h>
 
 //------------------------------------------------------------------------------
 
@@ -25,9 +25,12 @@
 // Forward Declarations:
 //------------------------------------------------------------------------------
 
-typedef class Animation Animation;
-typedef class Physics Physics;
+
 typedef class Transform Transform;
+typedef class Physics Physics;
+typedef struct Event Event;
+typedef class Texture Texture;
+typedef class Mesh Mesh;
 
 //------------------------------------------------------------------------------
 // Public Structures:
@@ -35,9 +38,8 @@ typedef class Transform Transform;
 
 namespace Behaviors
 {
-	typedef class PlayerMovement PlayerMovement;
 
-	class MonkeyAnimation : public Component
+	class CameraFollow : public Component
 	{
 	public:
 		//------------------------------------------------------------------------------
@@ -46,12 +48,13 @@ namespace Behaviors
 
 		// Constructor
 		// Params:
-		//	 walkStart  = The starting frame for the walk animation.
-		//   walkLength = The number of frames of the walk animation.
-		//   jumpStart  = The starting frame for the jump animation.
-		//   idleStart  = The starting frame for the idle animation.
-		MonkeyAnimation(unsigned walkStart, unsigned walkLength, 
-			unsigned jumpStart, unsigned idleStart);
+		//   velocityLookScalar = How much velocity should influence the camera's offset.
+		//   targetLerp = How far along the path to the target the camera should be over the course of 1 second.
+		//   velocityLerp = How close the smoothed velocity should be to the current velocity after 1 second.
+		CameraFollow(Vector2D velocityLookScalar = Vector2D(100.0f, 100.0f), float targetLerp = 0.9f, float velocityLerp = 0.9f);
+
+		// Destructor
+		~CameraFollow();
 
 		// Clone a component and return a pointer to the cloned component.
 		// Returns:
@@ -61,58 +64,30 @@ namespace Behaviors
 		// Initialize this component (happens at object creation).
 		void Initialize() override;
 
-		// Fixed update function for this component.
+		// Update function for this component.
 		// Params:
 		//   dt = The (fixed) change in time since the last step.
 		void Update(float dt) override;
 
+		void SnapToTarget();
+
 	private:
-		//------------------------------------------------------------------------------
-		// Private Functions:
-		//------------------------------------------------------------------------------
-
-		// Choose the correct state based on velocity.
-		void ChooseNextState();
-
-		// Change states and start the appropriate animation.
-		void ChangeCurrentState();
-
-		// Flip the sprite based on velocity and current state.
-		void FlipSprite() const;
-
-		//------------------------------------------------------------------------------
-		// Private Structures:
-		//------------------------------------------------------------------------------
-
-		enum State
-		{
-			StateIdle,
-			StateWalk,
-			StateJump,
-		};
-
 		//------------------------------------------------------------------------------
 		// Private Variables:
 		//------------------------------------------------------------------------------
 
-		// Animation variables
-		unsigned walkStart;
-		unsigned walkLength;
-		unsigned jumpStart;
-		unsigned idleStart;
-
-		// Animation state
-		State currentState;
-		State nextState;
+		// Properties (save to/load from file)
+		Vector2D velocityLookScalar;
+		float targetLerp;
+		float velocityLerp;
 
 		// Components
-		Animation* animation;
-		Physics* physics;
 		Transform* transform;
-		PlayerMovement* monkeyMovement;
+		Physics* physics;
 
-		// Flip
-		Vector2D originalScale;
+		// Other variables
+		Vector2D velocity;
+		Vector2D smoothedVelocity;
 	};
 }
 

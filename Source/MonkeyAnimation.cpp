@@ -24,7 +24,7 @@
 #include "Animation.h"
 #include "Physics.h"
 #include "Transform.h"
-#include "MonkeyMovement.h"
+#include "PlayerMovement.h"
 
 //------------------------------------------------------------------------------
 
@@ -64,7 +64,7 @@ namespace Behaviors
 		animation = static_cast<Animation*>(GetOwner()->GetComponent("Animation"));
 		physics = static_cast<Physics*>(GetOwner()->GetComponent("Physics"));
 		transform = static_cast<Transform*>(GetOwner()->GetComponent("Transform"));
-		monkeyMovement = static_cast<MonkeyMovement*>(GetOwner()->GetComponent("MonkeyMovement"));
+		monkeyMovement = static_cast<PlayerMovement*>(GetOwner()->GetComponent("PlayerMovement"));
 
 		// Play the idle animation.
 		animation->Play(idleStart, 1, 0.0f, true);
@@ -104,7 +104,7 @@ namespace Behaviors
 			nextState = State::StateJump;
 		}
 		// If we are moving to the side, use the walking state.
-		else if (abs(velocity.x) > 16.8f)
+		else if (abs(velocity.x) > 75.0f)
 		{
 			nextState = State::StateWalk;
 		}

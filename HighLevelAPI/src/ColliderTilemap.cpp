@@ -35,7 +35,7 @@
 //------------------------------------------------------------------------------
 
 // Constructor for Tilemap collider.
-ColliderTilemap::ColliderTilemap() : Collider(ColliderType::ColliderTypeTilemap), map(nullptr)
+ColliderTilemap::ColliderTilemap() : Collider(ColliderType::ColliderTypeTilemap), map(nullptr), active(true)
 {
 }
 
@@ -59,6 +59,9 @@ void ColliderTilemap::Draw()
 //	 Return the results of the collision check.
 bool ColliderTilemap::IsCollidingWith(const Collider& other) const
 {
+	if (!active)
+		return false;
+
 	// Only collision with rectangle colliders is handled.
 	if (other.GetType() != ColliderType::ColliderTypeRectangle)
 		return false;
@@ -137,6 +140,22 @@ bool ColliderTilemap::IsCollidingWith(const Collider& other) const
 void ColliderTilemap::SetTilemap(const Tilemap* map_)
 {
 	map = map_;
+}
+
+// Sets whether the tilemap should resolve collisions.
+// Params:
+//   active = Whether the tilemap should resolve collisions.
+void ColliderTilemap::SetActive(bool active_)
+{
+	active = active_;
+}
+
+// Gets whether the tilemap should resolve collisions.
+// Returns:
+//   Whether the tilemap should resolve collisions.
+bool ColliderTilemap::IsActive()
+{
+	return active;
 }
 
 //------------------------------------------------------------------------------

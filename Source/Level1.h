@@ -1,6 +1,6 @@
 //------------------------------------------------------------------------------
 //
-// File Name:	Level2.h
+// File Name:	Level1.h
 // Author(s):	Jeremy Kings (j.kings)
 // Project:		BetaFramework
 // Course:		WANIC VGP2 2018-2019
@@ -18,17 +18,17 @@
 #include "Vector2D.h"
 #include "Level.h"
 
-#include <fmod.hpp>
-
 //------------------------------------------------------------------------------
 
 //------------------------------------------------------------------------------
-// Forward Declarations:
+// Forward References:
 //------------------------------------------------------------------------------
 
-class GameObject;
+class Texture;
 class Mesh;
-class SoundManager;
+class SpriteSource;
+class GameObject;
+class Tilemap;
 
 //------------------------------------------------------------------------------
 // Public Structures:
@@ -43,43 +43,51 @@ namespace Levels
 		// Public Functions:
 		//------------------------------------------------------------------------------
 
-		// Creates an instance of Level 1.
+		// Creates an instance of Level 2.
 		Level1();
 
-		// Load the resources associated with Level 1.
+		// Load the resources associated with Level 2.
 		void Load() override;
 
-		// Initialize the memory associated with Level 1.
+		// Initialize the memory associated with Level 2.
 		void Initialize() override;
 
-		
-		// Update the Level 1.
+		// Update Level 2.
 		// Params:
 		//	 dt = Change in time (in seconds) since the last game loop.
 		void Update(float dt) override;
 
-		// Destroy objects associated with level 1.
-		void Shutdown() override;
-
-		// Unload the resources associated with Level 1.
+		// Unload the resources associated with Level 2.
 		void Unload() override;
 
 	private:
+
 		//------------------------------------------------------------------------------
 		// Private Variables:
 		//------------------------------------------------------------------------------
 
-		// Meshes
-		Mesh* meshShip;
-		Mesh* meshBullet;
+		Mesh* genericQuadMesh;
 
-		// Title
-		static const unsigned titleStringLength = 20;
-		char windowTitle[titleStringLength];
+		// Monkey
+		Mesh* meshMonkey;
+		Texture* textureMonkey;
+		SpriteSource* spriteSourceMonkey;
 
-		// Sound manager
-		SoundManager* soundManager;
-		FMOD::Channel* musicChannel;
+		unsigned columnsMonkey;
+		unsigned rowsMonkey;
+
+		// Collectible
+		Texture* textureCollectible;
+		SpriteSource* spriteSourceCollectible;
+
+		// Tilemap
+		Tilemap* dataMap;
+		Texture* textureMap;
+		SpriteSource* spriteSourceMap;
+		Mesh* meshMap;
+
+		unsigned columnsMap;
+		unsigned rowsMap;
 	};
 }
 

@@ -1,6 +1,6 @@
 //------------------------------------------------------------------------------
 //
-// File Name:	MonkeyMovement.cpp
+// File Name:	PlayerMovement.cpp
 // Author(s):	David Cohen (david.cohen)
 // Project:		BetaFramework
 // Course:		WANIC VGP2 2018-2019
@@ -15,7 +15,7 @@
 
 #include "stdafx.h"
 
-#include "MonkeyMovement.h"
+#include "PlayerMovement.h"
 
 // Systems
 #include "GameObject.h"
@@ -47,13 +47,25 @@ namespace Behaviors
 	//   collision = Which sides the monkey collided on.
 	void MonkeyMapCollisionHandler(GameObject& object, const MapCollision& collision)
 	{
-		// Get the MonkeyMovement component.
-		MonkeyMovement* monkeyMovement = static_cast<MonkeyMovement*>(object.GetComponent("MonkeyMovement"));
+		// Get the PlayerMovement component.
+		PlayerMovement* monkeyMovement = static_cast<PlayerMovement*>(object.GetComponent("PlayerMovement"));
 
 		// If the monkey's collider is colliding on the bottom, mark the monkey as on ground.
 		if (collision.bottom)
 		{
 			monkeyMovement->onGround = true;
+		}
+
+		// Save whether the monkey is touching a wall, used for wall jumping.
+
+		if (collision.left)
+		{
+			monkeyMovement->onLeftWall = true;
+		}
+
+		if (collision.right)
+		{
+			monkeyMovement->onRightWall = true;
 		}
 	}
 
@@ -84,23 +96,24 @@ namespace Behaviors
 	}
 
 	// Constructor
-	MonkeyMovement::MonkeyMovement() : Component("MonkeyMovement"), monkeyWalkSpeed(300.0f), monkeyJumpSpeed(800.0f),
-		gravity(0.0f, -1200.0f), terminalVelocity(700.0f), gracePeriod(0.15f),
+	PlayerMovement::PlayerMovement() : Component("PlayerMovement"), monkeyWalkSpeed(250.0f), jumpSpeed(0.0f, 800.0f), slidingJumpSpeed(600.0f, 500.0f),
+		gravity(0.0f, -1200.0f), slidingGravity(0.0f, -600.0f), terminalVelocity(700.0f), slidingTerminalVelocity(150.0f), gracePeriod(0.15f),
 		transform(nullptr), physics(nullptr),
-		onGround(false), hasJumped(false), airTime(0.0f), movementLerp(0.998f)
+		onGround(false), onLeftWall(false), onRightWall(false),
+		hasJumped(false), airTime(0.0f), leftTime(0.0f), rightTime(0.0f), movementLerp(0.96f)
 	{
 	}
 
 	// Clone a component and return a pointer to the cloned component.
 	// Returns:
 	//   A pointer to a dynamically allocated clone of the component.
-	Component* MonkeyMovement::Clone() const
+	Component* PlayerMovement::Clone() const
 	{
-		return new MonkeyMovement(*this);
+		return new PlayerMovement(*this);
 	}
 
 	// Initialize this component (happens at object creation).
-	void MonkeyMovement::Initialize()
+	void PlayerMovement::Initialize()
 	{
 		// Store the required components for ease of access.
 		transform = static_cast<Transform*>(GetOwner()->GetComponent("Transform"));
@@ -118,7 +131,7 @@ namespace Behaviors
 	// Fixed update function for this component.
 	// Params:
 	//   dt = The (fixed) change in time since the last step.
-	void MonkeyMovement::Update(float dt)
+	void PlayerMovement::Update(float dt)
 	{
 		UNREFERENCED_PARAMETER(dt);
 
@@ -134,7 +147,7 @@ namespace Behaviors
 	//------------------------------------------------------------------------------
 
 	// Moves horizontally based on input
-	void MonkeyMovement::MoveHorizontal(float dt) const
+	void PlayerMovement::MoveHorizontal(float dt) const
 	{
 		Input& input = Input::GetInstance();
 
@@ -164,13 +177,28 @@ namespace Behaviors
 	}
 
 	// Moves vertically based on input
-	void MonkeyMovement::MoveVertical(float dt)
+	void PlayerMovement::MoveVertical(float dt)
 	{
 		Input& input = Input::GetInstance();
 
 		Vector2D velocity = physics->GetVelocity();
 
-		if (onGround)
+		// Reset time since touching walls.
+		if (onLeftWall && !onRightWall)
+			leftTime = 0.0f;
+		else
+			leftTime += dt;
+
+		if (onRightWall && !onLeftWall)
+			rightTime = 0.0f;
+		else
+			rightTime += dt;
+
+		bool onlyLeftWall = leftTime <= gracePeriod;
+		bool onlyRightWall = rightTime <= gracePeriod;
+		bool isSliding = (onlyLeftWall || onlyRightWall) && !onGround;
+
+		if (onGround || (onLeftWall && !onRightWall) || (onRightWall && !onLeftWall))
 		{
 			// Reset time spent in the air.
 			airTime = 0.0f;
@@ -184,11 +212,30 @@ namespace Behaviors
 			airTime += dt;
 		}
 
+		bool canJump = airTime <= gracePeriod || onlyLeftWall || onlyRightWall;
+
 		// If the monkey has not jumped since landing, was on the ground recently, and the up arrow key is pressed, jump.
-		if (!hasJumped && airTime <= gracePeriod && input.CheckHeld(VK_UP))
+		if (!hasJumped && canJump && input.CheckHeld(VK_UP))
 		{
-			// Increase Y velocity.
-			velocity.y = monkeyJumpSpeed;
+			if (isSliding)
+			{
+				// Increase Y velocity.
+				velocity.y = slidingJumpSpeed.y;
+
+				if (onlyLeftWall)
+				{
+					velocity.x = slidingJumpSpeed.x;
+				}
+				else if (onlyRightWall)
+				{
+					velocity.x = -slidingJumpSpeed.x;
+				}
+			}
+			else
+			{
+				// Increase Y velocity.
+				velocity.y = jumpSpeed.y;
+			}
 
 			hasJumped = true;
 		}
@@ -196,16 +243,32 @@ namespace Behaviors
 		// Apply gravity if in air.
 		if (!onGround)
 		{
-			physics->AddForce(gravity);
+			if (isSliding)
+			{
+				if (velocity.y > 0.0f)
+					physics->AddForce(gravity);
+				else
+					physics->AddForce(slidingGravity);
+			}
+			else
+			{
+				physics->AddForce(gravity);
+			}
 		}
 
 		// Clamp velocity.
-		velocity.y = max(-terminalVelocity, min(terminalVelocity, velocity.y));
+		// Use different terminal velocity depending on whether the monkey is sliding.
+		if (isSliding)
+			velocity.y = max(-slidingTerminalVelocity, velocity.y);
+		else
+			velocity.y = max(-terminalVelocity, velocity.y);
 
 		// Set the velocity.
 		physics->SetVelocity(velocity);
 
 		onGround = false;
+		onLeftWall = false;
+		onRightWall = false;
 	}
 }
 
