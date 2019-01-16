@@ -74,6 +74,16 @@ public:
 	//   map = A pointer to the tilemap resource.
 	void SetTilemap(const Tilemap* map);
 
+	// Sets whether the tilemap should resolve collisions.
+	// Params:
+	//   active = Whether the tilemap should resolve collisions.
+	void SetActive(bool active);
+
+	// Gets whether the tilemap should resolve collisions.
+	// Returns:
+	//   Whether the tilemap should resolve collisions.
+	bool IsActive();
+
 private:
 	//------------------------------------------------------------------------------
 	// Private Functions:
@@ -120,6 +130,9 @@ private:
 
 	// The tilemap
 	const Tilemap* map;
+
+	// Whether the tilemap should resolve collisions
+	bool active;
 };
 
 //------------------------------------------------------------------------------
