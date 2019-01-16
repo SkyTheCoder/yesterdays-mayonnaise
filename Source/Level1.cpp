@@ -36,6 +36,8 @@
 #include "Transform.h"
 #include "Physics.h"
 #include "SpriteText.h"
+#include "ChipCollectible.h"
+#include "WinLevel.h"
 
 //------------------------------------------------------------------------------
 
@@ -69,6 +71,12 @@ namespace Levels
 		// Setup the player sprite source.
 		spriteSourceMonkey = new SpriteSource(columnsMonkey, rowsMonkey, textureMonkey);
 
+		// create collectible archetype and add to object manager archetypes
+		genericQuadMesh = CreateQuadMesh(Vector2D(1.0f, 1.0f), Vector2D(0.5f, 0.5f));
+		textureCollectible = Texture::CreateTextureFromFile("collectible.png");
+		spriteSourceCollectible = new SpriteSource(1, 1, textureCollectible);
+		GetSpace()->GetObjectManager().AddArchetype(*Archetypes::CreateCollectibleArchetype(genericQuadMesh, spriteSourceCollectible));
+
 		// Load the tilemap.
 		dataMap = Tilemap::CreateTilemapFromFile("Assets/Levels/Level1.txt");
 		if (dataMap == nullptr)
@@ -100,6 +108,12 @@ namespace Levels
 		objectManager.AddArchetype(*Archetypes::CreatePlayer(meshMonkey, spriteSourceMonkey));
 		objectManager.AddArchetype(*Archetypes::CreateText());
 
+		// Create collectible(s)
+		GameObject* collectible = new GameObject(*objectManager.GetArchetypeByName("Collectible"));
+		collectible->AddComponent(new Behaviors::ChipCollectible());
+		static_cast<Transform*>(collectible->GetComponent("Transform"))->SetTranslation(Vector2D(100.0f, 0.0f));
+		objectManager.AddObject(*collectible);
+
 		// Create the player and add it to the object manager.
 		GameObject* player = new GameObject(*objectManager.GetArchetypeByName("Player"));
 		objectManager.AddObject(*player);
@@ -130,11 +144,15 @@ namespace Levels
 
 		Input& input = Input::GetInstance();
 
-		// Handle level switching.
-		if (input.CheckTriggered('1'))
+		// Restart level with 'R'
+		if (input.CheckTriggered('R'))
 		{
 			GetSpace()->RestartLevel();
 		}
+
+		// Win game if the goal-collectibles have been collected by slimes
+		if (GetSpace()->GetObjectManager().GetObjectCount("Collectible") == 0)
+			GetSpace()->SetLevel(new WinLevel());
 	}
 
 	// Unload the resources associated with Level 2.
@@ -145,9 +163,12 @@ namespace Levels
 		delete textureMap;
 		delete meshMap;
 		delete dataMap;
+		delete spriteSourceCollectible;
+		delete textureCollectible;
 		delete spriteSourceMonkey;
 		delete textureMonkey;
 		delete meshMonkey;
+		delete genericQuadMesh;
 	}
 }
 

@@ -66,6 +66,8 @@ namespace Levels
 		// Private Variables:
 		//------------------------------------------------------------------------------
 
+		Mesh* genericQuadMesh;
+
 		// Monkey
 		Mesh* meshMonkey;
 		Texture* textureMonkey;
@@ -73,6 +75,10 @@ namespace Levels
 
 		unsigned columnsMonkey;
 		unsigned rowsMonkey;
+
+		// Collectible
+		Texture* textureCollectible;
+		SpriteSource* spriteSourceCollectible;
 
 		// Tilemap
 		Tilemap* dataMap;
