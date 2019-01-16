@@ -98,6 +98,14 @@ namespace Archetypes
 	//	 A pointer to the newly constructed game object.
 	GameObject* CreateText();
 
+	// Create a collectible archetype
+	// Params:
+	//   mesh = The mesh to use for the sprite.
+	//   spriteSource = The sprite source to use for the sprite.
+	// Returns:
+	//   A pointer to the newly constructed game archetype.
+	GameObject* CreateCollectibleArchetype(Mesh* mesh, SpriteSource* spriteSource);
+
 	// Create a game controller object.
 	// Returns;
 	//	 A pointer to the newly constructed game object.
