@@ -144,7 +144,7 @@ namespace Archetypes
 		player->AddComponent(new Behaviors::MonkeyAnimation(0, 8, 9, 12));
 
 		// Create a new CameraFollow.
-		player->AddComponent(new Behaviors::CameraFollow(Vector2D(100.0f, 25.0f)));
+		player->AddComponent(new Behaviors::CameraFollow(Vector2D(100.0f, 25.0f), 0.98f));
 
 		return player;
 	}

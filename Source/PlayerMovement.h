@@ -91,9 +91,12 @@ namespace Behaviors
 
 		// Movement properties
 		float monkeyWalkSpeed;
-		float monkeyJumpSpeed;
+		Vector2D jumpSpeed;
+		Vector2D slidingJumpSpeed;
 		Vector2D gravity;
+		Vector2D slidingGravity;
 		float terminalVelocity;
+		float slidingTerminalVelocity;
 		float gracePeriod;
 
 		// Components
@@ -102,8 +105,12 @@ namespace Behaviors
 
 		// Misc
 		bool onGround;
+		bool onLeftWall;
+		bool onRightWall;
 		bool hasJumped;
 		float airTime;
+		float leftTime;
+		float rightTime;
 		float movementLerp;
 
 		friend class MonkeyAnimation;
