@@ -104,7 +104,7 @@ namespace Behaviors
 			nextState = State::StateJump;
 		}
 		// If we are moving to the side, use the walking state.
-		else if (abs(velocity.x) > 35.0f)
+		else if (abs(velocity.x) > 75.0f)
 		{
 			nextState = State::StateWalk;
 		}
