@@ -138,13 +138,10 @@ namespace Archetypes
 		player->AddComponent(new Animation());
 
 		// Create a new player movement.
-		player->AddComponent(new Behaviors::PlayerMovement());
+		player->AddComponent(new Behaviors::PlayerMovement(VK_UP, VK_LEFT, VK_RIGHT));
 
 		// Create a new MonkeyAnimation.
 		player->AddComponent(new Behaviors::MonkeyAnimation(0, 8, 9, 12));
-
-		// Create a new CameraFollow.
-		player->AddComponent(new Behaviors::CameraFollow(Vector2D(100.0f, 25.0f), 0.98f));
 
 		return player;
 	}
@@ -286,9 +283,6 @@ namespace Archetypes
 	}
 
 	// Create a text game object.
-	// Params:
-	//   mesh  = The mesh to use for the object's sprite.
-	//   spriteSource = The sprite source to use for the object.
 	// Returns:
 	//	 A pointer to the newly constructed game object.
 	GameObject* CreateText()
@@ -308,6 +302,20 @@ namespace Archetypes
 		text->AddComponent(spriteText);
 
 		return text;
+	}
+
+	// Create a game controller object.
+	// Returns;
+	//	 A pointer to the newly constructed game object.
+	GameObject* CreateGameController()
+	{
+		// Create a new game object.
+		GameObject* gameController = new GameObject("GameController");
+
+		// Create a new CameraFollow.
+		gameController->AddComponent(new Behaviors::CameraFollow(Vector2D(100.0f, 25.0f), 0.98f));
+
+		return gameController;
 	}
 }
 

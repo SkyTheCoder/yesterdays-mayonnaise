@@ -36,6 +36,8 @@
 #include "Transform.h"
 #include "Physics.h"
 #include "SpriteText.h"
+#include "CameraFollow.h"
+#include "PlayerMovement.h"
 
 //------------------------------------------------------------------------------
 
@@ -99,10 +101,15 @@ namespace Levels
 		// Add archetypes to the object manager.
 		objectManager.AddArchetype(*Archetypes::CreatePlayer(meshMonkey, spriteSourceMonkey));
 		objectManager.AddArchetype(*Archetypes::CreateText());
+		objectManager.AddArchetype(*Archetypes::CreateGameController());
 
 		// Create the player and add it to the object manager.
 		GameObject* player = new GameObject(*objectManager.GetArchetypeByName("Player"));
 		objectManager.AddObject(*player);
+
+		GameObject* player2 = new GameObject(*objectManager.GetArchetypeByName("Player"));
+		static_cast<Behaviors::PlayerMovement*>(player2->GetComponent("PlayerMovement"))->SetKeybinds('W', 'A', 'D');
+		objectManager.AddObject(*player2);
 
 		// Create test text and add it to the object manager.
 		GameObject* text = new GameObject(*objectManager.GetArchetypeByName("Text"));
@@ -119,6 +126,11 @@ namespace Levels
 			GameObject* tilemap = Archetypes::CreateTilemapObject(meshMap, spriteSourceMap, dataMap);
 			objectManager.AddObject(*tilemap);
 		}
+
+		GameObject* gameController = new GameObject(*objectManager.GetArchetypeByName("GameController"));
+		static_cast<Behaviors::CameraFollow*>(gameController->GetComponent("CameraFollow"))->AddPlayer(player);
+		static_cast<Behaviors::CameraFollow*>(gameController->GetComponent("CameraFollow"))->AddPlayer(player2);
+		objectManager.AddObject(*gameController);
 	}
 
 	// Update Level 1.

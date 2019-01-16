@@ -94,12 +94,14 @@ namespace Archetypes
 	GameObject* CreateTilemapObject(Mesh* mesh, SpriteSource* spriteSource, Tilemap* map);
 
 	// Create a text game object.
-	// Params:
-	//   mesh  = The mesh to use for the object's sprite.
-	//   spriteSource = The sprite source to use for the object.
 	// Returns:
 	//	 A pointer to the newly constructed game object.
 	GameObject* CreateText();
+
+	// Create a game controller object.
+	// Returns;
+	//	 A pointer to the newly constructed game object.
+	GameObject* CreateGameController();
 }
 
 //----------------------------------------------------------------------------

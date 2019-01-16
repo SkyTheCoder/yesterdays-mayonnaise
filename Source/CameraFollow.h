@@ -18,6 +18,7 @@
 #include "Component.h" // base class
 
 #include <Vector2D.h>
+#include <vector>
 
 //------------------------------------------------------------------------------
 
@@ -51,7 +52,8 @@ namespace Behaviors
 		//   velocityLookScalar = How much velocity should influence the camera's offset.
 		//   targetLerp = How far along the path to the target the camera should be over the course of 1 second.
 		//   velocityLerp = How close the smoothed velocity should be to the current velocity after 1 second.
-		CameraFollow(Vector2D velocityLookScalar = Vector2D(100.0f, 100.0f), float targetLerp = 0.9f, float velocityLerp = 0.9f);
+		//   distanceLerp = How close the smoothed distance should be to the target distance after 1 second.
+		CameraFollow(Vector2D velocityLookScalar = Vector2D(100.0f, 100.0f), float targetLerp = 0.9f, float velocityLerp = 0.9f, float distanceLerp = 0.9f);
 
 		// Destructor
 		~CameraFollow();
@@ -69,25 +71,52 @@ namespace Behaviors
 		//   dt = The (fixed) change in time since the last step.
 		void Update(float dt) override;
 
+		// Snaps the camera to the target.
 		void SnapToTarget();
+
+		// Adds a player to the player list.
+		// Params:
+		//   player = The new player to follow.
+		void AddPlayer(GameObject* player);
 
 	private:
 		//------------------------------------------------------------------------------
+		// Private Structures:
+		//------------------------------------------------------------------------------
+
+		struct PlayerData
+		{
+			// Constructor
+			// Params:
+			//   gameObject = The game object of the player.
+			PlayerData(GameObject* gameObject = nullptr);
+
+			GameObject* gameObject;
+
+			// Components
+			Transform* transform;
+			Physics* physics;
+
+			// Other variables
+			Vector2D velocity;
+			Vector2D smoothedVelocity;
+		};
+
+		//------------------------------------------------------------------------------
 		// Private Variables:
 		//------------------------------------------------------------------------------
+
+		// Players
+		std::vector<PlayerData> players;
 
 		// Properties (save to/load from file)
 		Vector2D velocityLookScalar;
 		float targetLerp;
 		float velocityLerp;
-
-		// Components
-		Transform* transform;
-		Physics* physics;
+		float distanceLerp;
 
 		// Other variables
-		Vector2D velocity;
-		Vector2D smoothedVelocity;
+		float smoothedDistance;
 	};
 }
 

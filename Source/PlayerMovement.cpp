@@ -96,7 +96,9 @@ namespace Behaviors
 	}
 
 	// Constructor
-	PlayerMovement::PlayerMovement() : Component("PlayerMovement"), monkeyWalkSpeed(250.0f), jumpSpeed(0.0f, 800.0f), slidingJumpSpeed(600.0f, 500.0f),
+	PlayerMovement::PlayerMovement(unsigned keyUp, unsigned keyLeft, unsigned keyRight) : Component("PlayerMovement"),
+		keyUp(keyUp), keyLeft(keyLeft), keyRight(keyRight),
+		monkeyWalkSpeed(250.0f), jumpSpeed(0.0f, 800.0f), slidingJumpSpeed(600.0f, 500.0f),
 		gravity(0.0f, -1200.0f), slidingGravity(0.0f, -600.0f), terminalVelocity(700.0f), slidingTerminalVelocity(150.0f), gracePeriod(0.15f),
 		transform(nullptr), physics(nullptr),
 		onGround(false), onLeftWall(false), onRightWall(false),
@@ -142,6 +144,18 @@ namespace Behaviors
 		MoveVertical(dt);
 	}
 
+	// Sets the keybinds for the monkey.
+	// Params:
+	//   keyUp = The up keybind.
+	//   keyLeft = The left keybind.
+	//   keyRight = The right keybind.
+	void PlayerMovement::SetKeybinds(unsigned keyUp_, unsigned keyLeft_, unsigned keyRight_)
+	{
+		keyUp = keyUp_;
+		keyLeft = keyLeft_;
+		keyRight = keyRight_;
+	}
+
 	//------------------------------------------------------------------------------
 	// Private Functions:
 	//------------------------------------------------------------------------------
@@ -157,13 +171,13 @@ namespace Behaviors
 		float targetVelocityX = 0.0f;
 
 		// If the right arrow key is pressed, move to the right.
-		if (input.CheckHeld(VK_RIGHT))
+		if (input.CheckHeld(keyRight))
 		{
 			targetVelocityX += monkeyWalkSpeed;
 		}
 
 		// If the right arrow key is pressed, move to the left.
-		if (input.CheckHeld(VK_LEFT))
+		if (input.CheckHeld(keyLeft))
 		{
 			targetVelocityX -= monkeyWalkSpeed;
 		}
@@ -215,7 +229,7 @@ namespace Behaviors
 		bool canJump = airTime <= gracePeriod || onlyLeftWall || onlyRightWall;
 
 		// If the monkey has not jumped since landing, was on the ground recently, and the up arrow key is pressed, jump.
-		if (!hasJumped && canJump && input.CheckHeld(VK_UP))
+		if (!hasJumped && canJump && input.CheckHeld(keyUp))
 		{
 			if (isSliding)
 			{
