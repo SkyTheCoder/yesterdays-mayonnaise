@@ -89,9 +89,14 @@ namespace Behaviors
 			// Constructor
 			// Params:
 			//   gameObject = The game object of the player.
-			PlayerData(GameObject* gameObject = nullptr);
+			PlayerData(GUID id);
 
-			GameObject* gameObject;
+			// Gets the player's game object.
+			// Returns:
+			//   If it exists, the player's game object, otherwise, nullptr.
+			GameObject* GetGameObject();
+
+			GUID id;
 
 			// Components
 			Transform* transform;

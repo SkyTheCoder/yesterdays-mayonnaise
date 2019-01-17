@@ -53,7 +53,7 @@ namespace Levels
 	// Public Functions:
 	//------------------------------------------------------------------------------
 
-	// Creates an instance of Level 2.
+	// Creates an instance of Level 1.
 	Level1::Level1() : Level("Level1"), meshMonkey(nullptr), textureMonkey(nullptr), spriteSourceMonkey(nullptr),
 		columnsMonkey(3), rowsMonkey(5), 
 		dataMap(nullptr), textureMap(nullptr), spriteSourceMap(nullptr), meshMap(nullptr),
@@ -61,7 +61,7 @@ namespace Levels
 	{
 	}
 
-	// Load the resources associated with Level 2.
+	// Load the resources associated with Level 1.
 	void Level1::Load()
 	{
 		// Create a new quad mesh for the sprite.
@@ -100,7 +100,7 @@ namespace Levels
 		Graphics::GetInstance().SetBackgroundColor(Colors::Black);
 	}
 
-	// Initialize the memory associated with Level 2.
+	// Initialize the memory associated with Level 1.
 	void Level1::Initialize()
 	{
 		GameObjectManager& objectManager = GetSpace()->GetObjectManager();
@@ -157,7 +157,7 @@ namespace Levels
 		UNREFERENCED_PARAMETER(dt);
 
 		// End game if a player dies
-		if (GetSpace()->GetObjectManager().GetObjectCount("Player") == 0)
+		if (GetSpace()->GetObjectManager().GetObjectCount("Player") < 2)
 		{
 			Input& input = Input::GetInstance();
 
@@ -178,7 +178,7 @@ namespace Levels
 		}
 	}
 
-	// Unload the resources associated with Level 2.
+	// Unload the resources associated with Level 1.
 	void Level1::Unload()
 	{
 		// Free all allocated memory.
