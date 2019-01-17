@@ -46,7 +46,7 @@ namespace Behaviors
 		//------------------------------------------------------------------------------
 
 		// Constructor
-		PlayerMovement();
+		PlayerMovement(unsigned keyUp, unsigned keyLeft, unsigned keyRight);
 
 		// Clone a component and return a pointer to the cloned component.
 		// Returns:
@@ -60,6 +60,13 @@ namespace Behaviors
 		// Params:
 		//   dt = The (fixed) change in time since the last step.
 		void Update(float dt) override;
+
+		// Sets the keybinds for the monkey.
+		// Params:
+		//   keyUp = The up keybind.
+		//   keyLeft = The left keybind.
+		//   keyRight = The right keybind.
+		void SetKeybinds(unsigned keyUp, unsigned keyLeft, unsigned keyRight);
 
 		// Map collision handler for Monkey objects.
 		// Params:
@@ -88,6 +95,11 @@ namespace Behaviors
 		//------------------------------------------------------------------------------
 		// Private Variables:
 		//------------------------------------------------------------------------------
+
+		// Keybinds
+		unsigned keyUp;
+		unsigned keyLeft;
+		unsigned keyRight;
 
 		// Movement properties
 		float monkeyWalkSpeed;
