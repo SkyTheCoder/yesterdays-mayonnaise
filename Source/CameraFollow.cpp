@@ -76,8 +76,15 @@ namespace Behaviors
 		// Store the required components for ease of access.
 		for (size_t i = 0; i < players.size(); i++)
 		{
-			players[i].transform = static_cast<Transform*>(players[i].gameObject->GetComponent("Transform"));
-			players[i].physics = static_cast<Physics*>(players[i].gameObject->GetComponent("Physics"));
+			GameObject* gameObject = players[i].GetGameObject();
+			if (gameObject == nullptr)
+			{
+				players.erase(players.begin() + i--);
+				continue;
+			}
+
+			players[i].transform = static_cast<Transform*>(gameObject->GetComponent("Transform"));
+			players[i].physics = static_cast<Physics*>(gameObject->GetComponent("Physics"));
 		}
 
 		SnapToTarget();
@@ -100,6 +107,13 @@ namespace Behaviors
 
 		for (size_t i = 0; i < players.size(); i++)
 		{
+			GameObject* gameObject = players[i].GetGameObject();
+			if (gameObject == nullptr)
+			{
+				players.erase(players.begin() + i--);
+				continue;
+			}
+
 			// Only update velocity when the player is moving.
 			if (players[i].physics->GetVelocity().Magnitude() > 100.0f)
 			{
@@ -150,6 +164,13 @@ namespace Behaviors
 
 		for (size_t i = 0; i < players.size(); i++)
 		{
+			GameObject* gameObject = players[i].GetGameObject();
+			if (gameObject == nullptr)
+			{
+				players.erase(players.begin() + i--);
+				continue;
+			}
+
 			Vector2D targetTranslation = players[i].transform->GetTranslation() + Vector2D(players[i].smoothedVelocity.x * velocityLookScalar.x, players[i].smoothedVelocity.y * velocityLookScalar.y);
 			targetTranslations.push_back(targetTranslation);
 		}
@@ -185,7 +206,7 @@ namespace Behaviors
 	//   player = The new player to follow.
 	void CameraFollow::AddPlayer(GameObject* player)
 	{
-		players.push_back(PlayerData(player));
+		players.push_back(PlayerData(player->GetID()));
 	}
 
 	//------------------------------------------------------------------------------
@@ -195,8 +216,16 @@ namespace Behaviors
 	// Constructor
 	// Params:
 	//   gameObject = The game object of the player.
-	CameraFollow::PlayerData::PlayerData(GameObject* gameObject) : gameObject(gameObject), transform(nullptr), physics(nullptr), velocity(0.0f, 0.0f), smoothedVelocity(0.0f, 0.0f)
+	CameraFollow::PlayerData::PlayerData(GUID id) : id(id), transform(nullptr), physics(nullptr), velocity(0.0f, 0.0f), smoothedVelocity(0.0f, 0.0f)
 	{
+	}
+
+	// Gets the player's game object.
+	// Returns:
+	//   If it exists, the player's game object, otherwise, nullptr.
+	GameObject* CameraFollow::PlayerData::GetGameObject()
+	{
+		return static_cast<GameObject*>(BetaObject::GetObjectByID(id));
 	}
 }
 

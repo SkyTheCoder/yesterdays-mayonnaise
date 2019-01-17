@@ -135,8 +135,6 @@ namespace Behaviors
 	//   dt = The (fixed) change in time since the last step.
 	void PlayerMovement::Update(float dt)
 	{
-		UNREFERENCED_PARAMETER(dt);
-
 		// Handle horizontal movement.
 		MoveHorizontal(dt);
 
