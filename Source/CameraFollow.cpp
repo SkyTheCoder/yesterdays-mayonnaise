@@ -133,14 +133,11 @@ namespace Behaviors
 		Camera& camera = Graphics::GetInstance().GetCurrentCamera();
 
 		float mix = max(0.0f, min(1.0f, (highestDistance - 150.0f) / 2000.0f));
-		float distance = Interpolate(59.5f, 57.5f, mix);
-
-		// Smoothly interpolate the distance.
-		smoothedDistance = Interpolate(smoothedDistance, distance, distanceMix);
+		float distance = Interpolate(59.5f, 56.5f, mix);
 		
-		// Smoothly interpolate the camera to its new position.
+		// Smoothly interpolate the camera to its new position and distance.
 		camera.SetTranslation(Interpolate(camera.GetTranslation(), targetTranslationSum / static_cast<float>(targetTranslations.size()), targetMix));
-		camera.SetDistance(smoothedDistance);
+		camera.SetDistance(Interpolate(camera.GetDistance(), distance, distanceMix));
 	}
 
 	// Snaps the camera to the target.
@@ -149,14 +146,38 @@ namespace Behaviors
 		if (players.empty())
 			return;
 
-		Vector2D translationSum(0.0f, 0.0f);
+		std::vector<Vector2D> targetTranslations;
 
 		for (size_t i = 0; i < players.size(); i++)
 		{
-			translationSum += players[i].transform->GetTranslation();
+			Vector2D targetTranslation = players[i].transform->GetTranslation() + Vector2D(players[i].smoothedVelocity.x * velocityLookScalar.x, players[i].smoothedVelocity.y * velocityLookScalar.y);
+			targetTranslations.push_back(targetTranslation);
 		}
 
-		Graphics::GetInstance().GetCurrentCamera().SetTranslation(translationSum / static_cast<float>(players.size()));
+		Vector2D targetTranslationSum(0.0f, 0.0f);
+		float highestDistance = 0.0f;
+		for (size_t i = 0; i < targetTranslations.size(); i++)
+		{
+			for (size_t j = i + 1; j < targetTranslations.size(); j++)
+			{
+				float distance = targetTranslations[i].Distance(targetTranslations[j]);
+
+				if (distance > highestDistance)
+				{
+					highestDistance = distance;
+				}
+			}
+
+			targetTranslationSum += targetTranslations[i];
+		}
+
+		Camera& camera = Graphics::GetInstance().GetCurrentCamera();
+
+		float mix = max(0.0f, min(1.0f, (highestDistance - 150.0f) / 2000.0f));
+		float distance = Interpolate(59.5f, 56.5f, mix);
+
+		camera.SetTranslation(targetTranslationSum / static_cast<float>(players.size()));
+		camera.SetDistance(distance);
 	}
 
 	// Adds a player to the player list.

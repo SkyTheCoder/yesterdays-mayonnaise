@@ -114,9 +114,6 @@ namespace Behaviors
 		float targetLerp;
 		float velocityLerp;
 		float distanceLerp;
-
-		// Other variables
-		float smoothedDistance;
 	};
 }
 

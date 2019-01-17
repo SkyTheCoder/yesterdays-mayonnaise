@@ -50,7 +50,7 @@ MapCollision::MapCollision(bool bottom, bool top, bool left, bool right) : botto
 // Params:
 //   owner = Reference to the object that owns this component.
 Collider::Collider(ColliderType type) : Component("Collider"), transform(nullptr), physics(nullptr),
-	type(type), handler(nullptr)
+	type(type), handler(nullptr), mapHandler(nullptr)
 {
 }
 

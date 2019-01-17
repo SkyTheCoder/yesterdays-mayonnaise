@@ -80,7 +80,7 @@ namespace Levels
 		GetSpace()->GetObjectManager().AddArchetype(*Archetypes::CreateCollectibleArchetype(genericQuadMesh, spriteSourceCollectible));
 
 		// Load the tilemap.
-		dataMap = Tilemap::CreateTilemapFromFile("Assets/Levels/Level1.txt");
+		dataMap = Tilemap::CreateTilemapFromFile("Assets/Levels/TestLevel.txt");
 		if (dataMap == nullptr)
 		{
 			std::cout << "Error loading map!" << std::endl;
@@ -114,15 +114,19 @@ namespace Levels
 		// Create collectible(s)
 		GameObject* collectible = new GameObject(*objectManager.GetArchetypeByName("Collectible"));
 		collectible->AddComponent(new Behaviors::ChipCollectible());
-		static_cast<Transform*>(collectible->GetComponent("Transform"))->SetTranslation(Vector2D(100.0f, 0.0f));
+		static_cast<Transform*>(collectible->GetComponent("Transform"))->SetTranslation(Vector2D(300.0f, 0.0f));
 		objectManager.AddObject(*collectible);
 
 		// Create the player and add it to the object manager.
 		GameObject* player = new GameObject(*objectManager.GetArchetypeByName("Player"));
+		//static_cast<Transform*>(player->GetComponent("Transform"))->SetTranslation(Vector2D(100.0f, -2800.0f));
+		static_cast<Transform*>(player->GetComponent("Transform"))->SetTranslation(Vector2D(-150.0f, 50.0f));
 		objectManager.AddObject(*player);
 
 		GameObject* player2 = new GameObject(*objectManager.GetArchetypeByName("Player"));
 		static_cast<Behaviors::PlayerMovement*>(player2->GetComponent("PlayerMovement"))->SetKeybinds('W', 'A', 'D');
+		//static_cast<Transform*>(player2->GetComponent("Transform"))->SetTranslation(Vector2D(100.0f, -2800.0f));
+		static_cast<Transform*>(player2->GetComponent("Transform"))->SetTranslation(Vector2D(-150.0f, 50.0f));
 		objectManager.AddObject(*player2);
 
 		// Create test text and add it to the object manager.

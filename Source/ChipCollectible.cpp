@@ -29,6 +29,17 @@ namespace Behaviors
 	// Public Functions:
 	//------------------------------------------------------------------------------
 
+	// Deals with chip collision
+	void ChipCollectibleCollisionHandler(GameObject& collectible, GameObject& other)
+	{
+		UNREFERENCED_PARAMETER(collectible);
+
+		if (other.GetName() == "Player")
+		{
+			std::cout << "Chip Collected" << std::endl;
+		}
+	}
+
 	// Constructor
 	ChipCollectible::ChipCollectible()
 		: Component("ChipCollectible")
@@ -56,15 +67,6 @@ namespace Behaviors
 	void ChipCollectible::Update(float dt)
 	{
 		UNREFERENCED_PARAMETER(dt);
-	}
-
-	// Deals with chip collision
-	void ChipCollectibleCollisionHandler(GameObject& collectible, GameObject& player)
-	{
-		UNREFERENCED_PARAMETER(player);
-		UNREFERENCED_PARAMETER(collectible);
-
-		std::cout << "Chip Collected" << std::endl;
 	}
 }
 
