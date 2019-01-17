@@ -129,11 +129,9 @@ namespace Levels
 		static_cast<Transform*>(player2->GetComponent("Transform"))->SetTranslation(Vector2D(-150.0f, 50.0f));
 		objectManager.AddObject(*player2);
 
-		// Create test text and add it to the object manager.
-		GameObject* text = new GameObject(*objectManager.GetArchetypeByName("Text"));
-		static_cast<SpriteText*>(text->GetComponent("SpriteText"))->SetText("sicko mode");
-		static_cast<Transform*>(text->GetComponent("Transform"))->SetTranslation(Vector2D(50.0f, 50.0f));
-		objectManager.AddObject(*text);
+		// Create winText and add to objectManager
+		GameObject* winText = new GameObject(*objectManager.GetArchetypeByName("Text"));
+		objectManager.AddObject(*winText);
 
 		// Play the player's animation.
 		static_cast<Animation*>(player->GetComponent("Animation"))->Play(0, 8, 0.2f, true);
@@ -158,17 +156,26 @@ namespace Levels
 	{
 		UNREFERENCED_PARAMETER(dt);
 
-		Input& input = Input::GetInstance();
-
-		// Restart level with 'R'
-		if (input.CheckTriggered('R'))
+		// End game if a player dies
+		if (GetSpace()->GetObjectManager().GetObjectCount("Player") == 0)
 		{
-			GetSpace()->RestartLevel();
-		}
+			Input& input = Input::GetInstance();
 
-		// Win game if the goal-collectibles have been collected by slimes
-		if (GetSpace()->GetObjectManager().GetObjectCount("Collectible") == 0)
-			GetSpace()->SetLevel(new WinLevel());
+			GameObject* winText = GetSpace()->GetObjectManager().GetObjectByName("Text");
+
+			// Set text to winText
+			static_cast<SpriteText*>(winText->GetComponent("SpriteText"))->SetText("Someone won! Press <SPACE> to restart");
+
+			// Text follows camera
+			static_cast<Transform*>(winText->GetComponent("Transform"))
+				->SetTranslation(Graphics::GetInstance().GetCurrentCamera().GetTranslation());
+
+			// Restart on <SPACE>
+			if (input.CheckTriggered(' '))
+			{
+				GetSpace()->RestartLevel();
+			}
+		}
 	}
 
 	// Unload the resources associated with Level 1.

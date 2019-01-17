@@ -36,7 +36,6 @@
 
 namespace Behaviors
 {
-
 	//------------------------------------------------------------------------------
 	// Public Functions:
 	//------------------------------------------------------------------------------
@@ -75,8 +74,6 @@ namespace Behaviors
 	//   other  = The object the monkey is colliding with.
 	void MonkeyCollisionHandler(GameObject& object, GameObject& other)
 	{
-		UNREFERENCED_PARAMETER(object);
-
 		// Destroy collectibles when touching.
 		if (other.GetName() == "Collectible")
 		{
@@ -84,14 +81,9 @@ namespace Behaviors
 		}
 
 		// Restart the level when touching hazards or enemies.
-		if (other.GetName() == "Hazard")
+		if (other.GetName() == "Hazard" || other.GetName() == "Enemy")
 		{
-			object.GetSpace()->RestartLevel();
-		}
-
-		if (other.GetName() == "Enemy")
-		{
-			object.GetSpace()->RestartLevel();
+			object.Destroy();
 		}
 	}
 
@@ -152,6 +144,22 @@ namespace Behaviors
 		keyUp = keyUp_;
 		keyLeft = keyLeft_;
 		keyRight = keyRight_;
+	}
+
+	// Sets the player's ID
+	// Params:
+	//   newID = The ID to set to
+	void PlayerMovement::setID(int newID)
+	{
+		playerID = newID;
+	}
+
+	// Sets the player's ID
+	// Returns:
+	//   The player's ID
+	int PlayerMovement::getID() const
+	{
+		return playerID;
 	}
 
 	//------------------------------------------------------------------------------
