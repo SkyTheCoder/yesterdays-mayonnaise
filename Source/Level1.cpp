@@ -157,7 +157,7 @@ namespace Levels
 		UNREFERENCED_PARAMETER(dt);
 
 		// End game if a player dies
-		if (GetSpace()->GetObjectManager().GetObjectCount("Player") == 0)
+		if (GetSpace()->GetObjectManager().GetObjectCount("Player") < 2)
 		{
 			Input& input = Input::GetInstance();
 
