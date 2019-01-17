@@ -55,9 +55,11 @@ namespace Levels
 
 	// Creates an instance of Level 1.
 	Level1::Level1() : Level("Level1"), meshMonkey(nullptr), textureMonkey(nullptr), spriteSourceMonkey(nullptr),
-		columnsMonkey(3), rowsMonkey(5), 
-		dataMap(nullptr), textureMap(nullptr), spriteSourceMap(nullptr), meshMap(nullptr),
-		columnsMap(4), rowsMap(3)
+		columnsMonkey(3), rowsMonkey(5),
+		dataStaticMap(nullptr), dataRedMap(nullptr), dataBlueMap(nullptr),
+		textureStaticMap(nullptr), textureRedMap(nullptr), textureBlueMap(nullptr),
+		spriteSourceStaticMap(nullptr), spriteSourceRedMap(nullptr), spriteSourceBlueMap(nullptr),
+		meshMap(nullptr), columnsMap(4), rowsMap(3)
 	{
 	}
 
@@ -80,8 +82,11 @@ namespace Levels
 		GetSpace()->GetObjectManager().AddArchetype(*Archetypes::CreateCollectibleArchetype(genericQuadMesh, spriteSourceCollectible));
 
 		// Load the tilemap.
-		dataMap = Tilemap::CreateTilemapFromFile("Assets/Levels/TestLevel.txt");
-		if (dataMap == nullptr)
+		dataStaticMap = Tilemap::CreateTilemapFromFile("Assets/Levels/Arena3Static.txt");
+		dataRedMap = Tilemap::CreateTilemapFromFile("Assets/Levels/Arena3Red.txt");
+		dataBlueMap = Tilemap::CreateTilemapFromFile("Assets/Levels/Arena3Blue.txt");
+
+		if (dataStaticMap == nullptr || dataRedMap == nullptr || dataBlueMap == nullptr)
 		{
 			std::cout << "Error loading map!" << std::endl;
 		}
@@ -91,10 +96,14 @@ namespace Levels
 			meshMap = CreateQuadMesh(Vector2D(1.0f / columnsMap, 1.0f / rowsMap), Vector2D(0.5f, 0.5f));
 
 			// Load the tilemap texture.
-			textureMap = Texture::CreateTextureFromFile("Tilemap.png");
+			textureStaticMap = Texture::CreateTextureFromFile("Tilemap.png");
+			textureRedMap = Texture::CreateTextureFromFile("Tilemap.png");
+			textureBlueMap = Texture::CreateTextureFromFile("Tilemap.png");
 
 			// Setup the tilemap sprite source.
-			spriteSourceMap = new SpriteSource(columnsMap, rowsMap, textureMap);
+			spriteSourceStaticMap = new SpriteSource(columnsMap, rowsMap, textureStaticMap);
+			spriteSourceRedMap = new SpriteSource(columnsMap, rowsMap, textureRedMap);
+			spriteSourceBlueMap = new SpriteSource(columnsMap, rowsMap, textureBlueMap);
 		}
 
 		// Set the background color to black.
@@ -136,10 +145,10 @@ namespace Levels
 		// Play the player's animation.
 		static_cast<Animation*>(player->GetComponent("Animation"))->Play(0, 8, 0.2f, true);
 
-		if (dataMap != nullptr)
+		if (dataStaticMap != nullptr && dataRedMap != nullptr && dataBlueMap != nullptr)
 		{
 			// Create the tilemap and add it to the object manager.
-			GameObject* tilemap = Archetypes::CreateTilemapObject(meshMap, spriteSourceMap, dataMap);
+			GameObject* tilemap = Archetypes::CreateTilemapObject(meshMap, spriteSourceStaticMap, dataStaticMap);
 			objectManager.AddObject(*tilemap);
 		}
 
@@ -182,10 +191,16 @@ namespace Levels
 	void Level1::Unload()
 	{
 		// Free all allocated memory.
-		delete spriteSourceMap;
-		delete textureMap;
+		delete spriteSourceStaticMap;
+		delete spriteSourceRedMap;
+		delete spriteSourceBlueMap;
+		delete textureStaticMap;
+		delete textureRedMap;
+		delete textureBlueMap;
 		delete meshMap;
-		delete dataMap;
+		delete dataStaticMap;
+		delete dataRedMap;
+		delete dataBlueMap;
 		delete spriteSourceCollectible;
 		delete textureCollectible;
 		delete spriteSourceMonkey;

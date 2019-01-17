@@ -81,9 +81,15 @@ namespace Levels
 		SpriteSource* spriteSourceCollectible;
 
 		// Tilemap
-		Tilemap* dataMap;
-		Texture* textureMap;
-		SpriteSource* spriteSourceMap;
+		Tilemap* dataStaticMap;
+		Tilemap* dataRedMap;
+		Tilemap* dataBlueMap;
+		Texture* textureStaticMap;
+		Texture* textureRedMap;
+		Texture* textureBlueMap;
+		SpriteSource* spriteSourceStaticMap;
+		SpriteSource* spriteSourceRedMap;
+		SpriteSource* spriteSourceBlueMap;
 		Mesh* meshMap;
 
 		unsigned columnsMap;
