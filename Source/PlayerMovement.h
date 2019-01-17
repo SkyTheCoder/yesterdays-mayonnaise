@@ -19,7 +19,6 @@
 
 #include "Vector2D.h" // Vector2D
 
-
 //------------------------------------------------------------------------------
 
 //------------------------------------------------------------------------------
@@ -67,6 +66,16 @@ namespace Behaviors
 		//   keyLeft = The left keybind.
 		//   keyRight = The right keybind.
 		void SetKeybinds(unsigned keyUp, unsigned keyLeft, unsigned keyRight);
+
+		// Sets the player's ID
+		// Params:
+		//   newID = The ID to set to
+		void setID(int newID);
+
+		// Sets the player's ID
+		// Returns:
+		//   The player's ID
+		int getID() const;
 
 		// Map collision handler for Monkey objects.
 		// Params:
@@ -116,6 +125,8 @@ namespace Behaviors
 		Physics* physics;
 
 		// Misc
+		int playerID;
+
 		bool onGround;
 		bool onLeftWall;
 		bool onRightWall;
