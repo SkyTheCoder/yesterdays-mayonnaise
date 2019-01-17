@@ -41,6 +41,7 @@
 #include "MonkeyAnimation.h"
 #include "SpriteText.h"
 #include "CameraFollow.h"
+#include "Hazard.h"
 
 //------------------------------------------------------------------------------
 
@@ -346,6 +347,40 @@ namespace Archetypes
 		gameController->AddComponent(new Behaviors::CameraFollow(Vector2D(100.0f, 75.0f), 0.98f));
 
 		return gameController;
+	}
+
+	// Create a hazard archetype
+	// Params:
+	//   mesh = The mesh to use for the sprite.
+	//   spriteSource = The sprite source to use for the sprite.
+	// Returns:
+	//   A pointer to the newly constructed game archetype.
+	GameObject* CreateHazardArchetype(Mesh* mesh, SpriteSource* spriteSource)
+	{
+		GameObject* Hazard = new GameObject("Hazard");
+
+		// Create transform
+		Transform* transform = new Transform();
+		transform->SetScale(Vector2D(75.0f, 75.0f));
+
+		// Create sprite
+		Sprite* sprite = new Sprite();
+		sprite->SetMesh(mesh);
+		sprite->SetSpriteSource(spriteSource);
+
+		// Create collider
+		ColliderRectangle* colliderrect = new ColliderRectangle(transform->GetScale() / 2.0f);
+
+		// Create hazard component
+		Behaviors::Hazard* hazard = new Behaviors::Hazard(false, true);
+
+		// Add components
+		Hazard->AddComponent(transform);
+		Hazard->AddComponent(sprite);
+		Hazard->AddComponent(colliderrect);
+		Hazard->AddComponent(hazard);
+
+		return Hazard;
 	}
 }
 
