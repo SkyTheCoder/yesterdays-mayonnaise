@@ -109,6 +109,7 @@ xcopy fmod\lib\fmodstudio64.dll "$(OutDir)" /Y</Command>
     <ClCompile Include="Source\ChipCollectible.cpp" />
     <ClCompile Include="Source\ColorChange.cpp" />
     <ClCompile Include="Source\DimensionController.cpp" />
+    <ClCompile Include="Source\Hazard.cpp" />
     <ClCompile Include="Source\Level1.cpp" />
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\MonkeyAnimation.cpp" />
@@ -129,6 +130,7 @@ xcopy fmod\lib\fmodstudio64.dll "$(OutDir)" /Y</Command>
     <ClInclude Include="Source\ChipCollectible.h" />
     <ClInclude Include="Source\ColorChange.h" />
     <ClInclude Include="Source\DimensionController.h" />
+    <ClInclude Include="Source\Hazard.h" />
     <ClInclude Include="Source\Level1.h" />
     <ClInclude Include="Source\MonkeyAnimation.h" />
     <ClInclude Include="Source\PlayerMovement.h" />

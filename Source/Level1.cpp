@@ -75,11 +75,10 @@ namespace Levels
 		// Setup the player sprite source.
 		spriteSourceMonkey = new SpriteSource(columnsMonkey, rowsMonkey, textureMonkey);
 
-		// create collectible archetype and add to object manager archetypes
+		// create collectible archetype
 		genericQuadMesh = CreateQuadMesh(Vector2D(1.0f, 1.0f), Vector2D(0.5f, 0.5f));
 		textureCollectible = Texture::CreateTextureFromFile("collectible.png");
 		spriteSourceCollectible = new SpriteSource(1, 1, textureCollectible);
-		GetSpace()->GetObjectManager().AddArchetype(*Archetypes::CreateCollectibleArchetype(genericQuadMesh, spriteSourceCollectible));
 
 		// Load the tilemap.
 		dataStaticMap = Tilemap::CreateTilemapFromFile("Assets/Levels/Arena3Static.txt");
@@ -119,6 +118,7 @@ namespace Levels
 		objectManager.AddArchetype(*Archetypes::CreatePlayer(meshMonkey, spriteSourceMonkey));
 		objectManager.AddArchetype(*Archetypes::CreateText());
 		objectManager.AddArchetype(*Archetypes::CreateGameController());
+		objectManager.AddArchetype(*Archetypes::CreateCollectibleArchetype(genericQuadMesh, spriteSourceCollectible));
 
 		// Create collectible(s)
 		GameObject* collectible = new GameObject(*objectManager.GetArchetypeByName("Collectible"));
