@@ -43,6 +43,7 @@
 #include "CameraFollow.h"
 #include "Hazard.h"
 #include "DimensionController.h"
+#include "ChipCollectible.h"
 
 //------------------------------------------------------------------------------
 
@@ -328,7 +329,11 @@ namespace Archetypes
 		// Create collider
 		ColliderRectangle* colliderrect = new ColliderRectangle(transform->GetScale() / 2.0f);
 
+		// Create chip collectible
+		Behaviors::ChipCollectible* chipcollectible = new Behaviors::ChipCollectible();
+
 		// Add components
+		Collectible->AddComponent(chipcollectible);
 		Collectible->AddComponent(transform);
 		Collectible->AddComponent(sprite);
 		Collectible->AddComponent(colliderrect);

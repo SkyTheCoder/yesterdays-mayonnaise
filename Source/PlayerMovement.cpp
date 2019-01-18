@@ -28,6 +28,7 @@
 #include "Physics.h"
 #include "Collider.h"
 #include "DimensionController.h"
+#include "ChipCollectible.h"
 
 //------------------------------------------------------------------------------
 
@@ -81,8 +82,14 @@ namespace Behaviors
 		// Destroy collectibles when touching.
 		if (other.GetName() == "Collectible")
 		{
-			other.Destroy();
-			monkeyMovement->chips += 5;
+			ChipCollectible* collectible = static_cast<ChipCollectible*>(other.GetComponent("ChipCollectible"));
+
+			// if chips are active, get more switcheroos and deactive the chips
+			if (collectible->IsActive())
+			{
+				monkeyMovement->chips += 5;
+				collectible->SetActive(false);
+			}
 		}
 
 		// Restart the level when touching hazards or enemies.

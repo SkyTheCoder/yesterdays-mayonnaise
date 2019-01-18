@@ -33,16 +33,12 @@ namespace Behaviors
 	void ChipCollectibleCollisionHandler(GameObject& collectible, GameObject& other)
 	{
 		UNREFERENCED_PARAMETER(collectible);
-
-		if (other.GetName() == "Player")
-		{
-			std::cout << "Chip Collected" << std::endl;
-		}
+		UNREFERENCED_PARAMETER(other);
 	}
 
 	// Constructor
-	ChipCollectible::ChipCollectible()
-		: Component("ChipCollectible")
+	ChipCollectible::ChipCollectible(float cooldown)
+		: Component("ChipCollectible"), sprite(nullptr), cooldown(cooldown), timer(0.0f), active(true)
 	{
 	}
 
@@ -55,7 +51,6 @@ namespace Behaviors
 	// Initialize
 	void ChipCollectible::Initialize()
 	{
-		transform = static_cast<Transform*>(GetOwner()->GetComponent("Transform"));
 		sprite = static_cast<Sprite*>(GetOwner()->GetComponent("Sprite"));
 		
 		// Set the collision handler
@@ -66,7 +61,32 @@ namespace Behaviors
 	// Update
 	void ChipCollectible::Update(float dt)
 	{
-		UNREFERENCED_PARAMETER(dt);
+		timer += dt;
+		
+		// set active after cooldown
+		if (timer >= cooldown)
+		{
+			timer = 0;
+			active = true;
+		}
+
+		// Make transparent if inactive
+		if (active)
+			sprite->SetAlpha(1.0f);
+		else
+			sprite->SetAlpha(0.3f);
+	}
+
+	// Returns whether the collectible is active
+	bool ChipCollectible::IsActive() const
+	{
+		return active;
+	}
+
+	// Set active
+	void ChipCollectible::SetActive(bool active_)
+	{
+		active = active_;
 	}
 }
 

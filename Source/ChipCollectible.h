@@ -38,8 +38,8 @@ namespace Behaviors
 	public:
 		// Constructor
 		// Params:
-		//   type: The Chip's type
-		ChipCollectible();
+		//   cooldown = The cooldown after collected
+		ChipCollectible(float cooldown = 30.0f);
 		
 		// Clones the componnet
 		Component* Clone() const override;
@@ -49,6 +49,12 @@ namespace Behaviors
 		// Updates the component
 		void Update(float dt) override;
 
+		// Returns whether the collectible is active
+		bool IsActive() const;
+
+		// Set active
+		void SetActive(bool active_);
+
 		// A friend function that handles the collisions of this Chip collectible
 		friend void ChipCollectibleCollisionHandler(GameObject& object, GameObject& otherObject);
 		
@@ -57,8 +63,12 @@ namespace Behaviors
 	//------------------------------------------------------------------------------
 		
 	private:
-		Transform* transform;
 		Sprite* sprite;
+
+		float cooldown;
+		float timer;
+
+		bool active;
 	};
 }
 
