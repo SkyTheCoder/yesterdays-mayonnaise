@@ -45,7 +45,7 @@ namespace Behaviors
 		//------------------------------------------------------------------------------
 
 		// Constructor
-		PlayerMovement(unsigned keyUp, unsigned keyLeft, unsigned keyRight);
+		PlayerMovement(unsigned keyUp, unsigned keyLeft, unsigned keyRight, unsigned keySwitch);
 
 		// Clone a component and return a pointer to the cloned component.
 		// Returns:
@@ -65,17 +65,17 @@ namespace Behaviors
 		//   keyUp = The up keybind.
 		//   keyLeft = The left keybind.
 		//   keyRight = The right keybind.
-		void SetKeybinds(unsigned keyUp, unsigned keyLeft, unsigned keyRight);
+		void SetKeybinds(unsigned keyUp, unsigned keyLeft, unsigned keyRight, unsigned keySwitch);
 
 		// Sets the player's ID.
 		// Params:
 		//   newID = The ID to set to.
-		void SetID(int newID);
+		void SetPlayerID(int newID);
 
 		// Sets the player's ID.
 		// Returns:
 		//   The player's ID.
-		int GetID() const;
+		int GetPlayerID() const;
 
 		// Map collision handler for Monkey objects.
 		// Params:
@@ -109,6 +109,7 @@ namespace Behaviors
 		unsigned keyUp;
 		unsigned keyLeft;
 		unsigned keyRight;
+		unsigned keySwitch;
 
 		// Movement properties
 		float monkeyWalkSpeed;
@@ -126,6 +127,7 @@ namespace Behaviors
 
 		// Misc
 		int playerID;
+		int chips;
 
 		bool onGround;
 		bool onLeftWall;

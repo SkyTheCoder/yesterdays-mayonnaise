@@ -45,7 +45,7 @@ namespace Behaviors
 
 	// Constructor
 	DimensionController::DimensionController() : Component("DimensionController"),
-		dimensions(std::vector<Dimension>())
+		dimensions(std::vector<Dimension>()), cooldown(1.0f), currentCooldown(0.0f)
 	{
 	}
 
@@ -67,7 +67,15 @@ namespace Behaviors
 	//   dt = The (fixed) change in time since the last step.
 	void DimensionController::Update(float dt)
 	{
-		UNREFERENCED_PARAMETER(dt);
+		currentCooldown = max(0.0f, currentCooldown - dt);
+	}
+
+	// Calculates how long until the dimension can be switched again.
+	// Returns:
+	//   How much longer until the dimension can be switched.
+	float DimensionController::GetSwitchCooldown() const
+	{
+		return currentCooldown;
 	}
 
 	// Sets the active dimension and deactivates all others.
@@ -103,12 +111,20 @@ namespace Behaviors
 			static_cast<Hazard*>(spike->GetComponent("Hazard"))->SetCollidable(true);
 			static_cast<Sprite*>(spike->GetComponent("Sprite"))->SetAlpha(1.0f);
 		}
+
+		currentCooldown = cooldown;
 	}
 
 	// Returns the active dimension.
-	unsigned DimensionController::GetActiveDimension()
+	unsigned DimensionController::GetActiveDimension() const
 	{
 		return activeDimension;
+	}
+
+	// Returns the number of dimensions.
+	unsigned DimensionController::GetDimensionCount() const
+	{
+		return static_cast<unsigned>(dimensions.size());
 	}
 
 	// Adds a new dimension.

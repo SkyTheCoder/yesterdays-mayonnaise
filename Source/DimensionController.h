@@ -58,13 +58,21 @@ namespace Behaviors
 		//   dt = The (fixed) change in time since the last step.
 		void Update(float dt) override;
 
+		// Calculates how long until the dimension can be switched again.
+		// Returns:
+		//   How much longer until the dimension can be switched.
+		float GetSwitchCooldown() const;
+
 		// Sets the active dimension and deactivates all others.
 		// Params:
 		//   dimension = The dimension to make active.
 		void SetActiveDimension(unsigned dimension);
 
 		// Returns the active dimension.
-		unsigned GetActiveDimension();
+		unsigned GetActiveDimension() const;
+
+		// Returns the number of dimensions.
+		unsigned GetDimensionCount() const;
 
 		// Adds a new dimension.
 		// Params:
@@ -96,14 +104,12 @@ namespace Behaviors
 		};
 
 		//------------------------------------------------------------------------------
-		// Private Functions:
-		//------------------------------------------------------------------------------
-
-		//------------------------------------------------------------------------------
 		// Private Variables:
 		//------------------------------------------------------------------------------
 
 		// Misc
+		float cooldown;
+		float currentCooldown;
 		unsigned activeDimension;
 		std::vector<Dimension> dimensions;
 	};

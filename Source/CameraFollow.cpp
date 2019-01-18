@@ -147,7 +147,7 @@ namespace Behaviors
 		Camera& camera = Graphics::GetInstance().GetCurrentCamera();
 
 		float mix = max(0.0f, min(1.0f, (highestDistance - 150.0f) / 2000.0f));
-		float distance = Interpolate(59.5f, 56.5f, mix);
+		float distance = Interpolate(59.0f, 56.0f, mix);
 		
 		// Smoothly interpolate the camera to its new position and distance.
 		camera.SetTranslation(Interpolate(camera.GetTranslation(), targetTranslationSum / static_cast<float>(targetTranslations.size()), targetMix));

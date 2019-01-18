@@ -27,6 +27,7 @@
 #include "Transform.h"
 #include "Physics.h"
 #include "Collider.h"
+#include "DimensionController.h"
 
 //------------------------------------------------------------------------------
 
@@ -74,10 +75,14 @@ namespace Behaviors
 	//   other  = The object the monkey is colliding with.
 	void MonkeyCollisionHandler(GameObject& object, GameObject& other)
 	{
+		// Get the PlayerMovement component.
+		PlayerMovement* monkeyMovement = static_cast<PlayerMovement*>(object.GetComponent("PlayerMovement"));
+
 		// Destroy collectibles when touching.
 		if (other.GetName() == "Collectible")
 		{
 			other.Destroy();
+			monkeyMovement->chips += 5;
 		}
 
 		// Restart the level when touching hazards or enemies.
@@ -88,12 +93,12 @@ namespace Behaviors
 	}
 
 	// Constructor
-	PlayerMovement::PlayerMovement(unsigned keyUp, unsigned keyLeft, unsigned keyRight) : Component("PlayerMovement"),
-		keyUp(keyUp), keyLeft(keyLeft), keyRight(keyRight),
+	PlayerMovement::PlayerMovement(unsigned keyUp, unsigned keyLeft, unsigned keyRight, unsigned keySwitch) : Component("PlayerMovement"),
+		keyUp(keyUp), keyLeft(keyLeft), keyRight(keyRight), keySwitch(keySwitch),
 		monkeyWalkSpeed(350.0f), jumpSpeed(0.0f, 850.0f), slidingJumpSpeed(600.0f, 675.0f),
 		gravity(0.0f, -1200.0f), slidingGravity(0.0f, -600.0f), terminalVelocity(700.0f), slidingTerminalVelocity(150.0f), gracePeriod(0.15f),
 		transform(nullptr), physics(nullptr),
-		playerID(0),
+		playerID(0), chips(0),
 		onGround(false), onLeftWall(false), onRightWall(false),
 		hasJumped(false), airTime(0.0f), leftTime(0.0f), rightTime(0.0f), movementLerpGround(0.95f), movementLerpAir(0.8f)
 	{
@@ -133,6 +138,17 @@ namespace Behaviors
 
 		// Handle vertical movement.
 		MoveVertical(dt);
+
+		GameObject* gameController = GetOwner()->GetSpace()->GetObjectManager().GetObjectByName("GameController");
+		DimensionController& dimensionController = *static_cast<DimensionController*>(gameController->GetComponent("DimensionController"));
+
+		Input& input = Input::GetInstance();
+		if (input.CheckTriggered(keySwitch) && chips > 0 && dimensionController.GetSwitchCooldown() <= 0.0f)
+		{
+			unsigned newDimension = (dimensionController.GetActiveDimension() + 1) % dimensionController.GetDimensionCount();
+			dimensionController.SetActiveDimension(newDimension);
+			--chips;
+		}
 	}
 
 	// Sets the keybinds for the monkey.
@@ -140,17 +156,18 @@ namespace Behaviors
 	//   keyUp = The up keybind.
 	//   keyLeft = The left keybind.
 	//   keyRight = The right keybind.
-	void PlayerMovement::SetKeybinds(unsigned keyUp_, unsigned keyLeft_, unsigned keyRight_)
+	void PlayerMovement::SetKeybinds(unsigned keyUp_, unsigned keyLeft_, unsigned keyRight_, unsigned keySwitch_)
 	{
 		keyUp = keyUp_;
 		keyLeft = keyLeft_;
 		keyRight = keyRight_;
+		keySwitch = keySwitch_;
 	}
 
 	// Sets the player's ID.
 	// Params:
 	//   newID = The ID to set to.
-	void PlayerMovement::SetID(int newID)
+	void PlayerMovement::SetPlayerID(int newID)
 	{
 		playerID = newID;
 	}
@@ -158,7 +175,7 @@ namespace Behaviors
 	// Sets the player's ID.
 	// Returns:
 	//   The player's ID.
-	int PlayerMovement::GetID() const
+	int PlayerMovement::GetPlayerID() const
 	{
 		return playerID;
 	}
