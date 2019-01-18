@@ -139,14 +139,14 @@ namespace Levels
 		GameObject* player = new GameObject(*objectManager.GetArchetypeByName("Player"));
 		Behaviors::PlayerMovement* playerMovement = static_cast<Behaviors::PlayerMovement*>(player->GetComponent("PlayerMovement"));
 		playerMovement->SetPlayerID(1);
-		static_cast<Transform*>(player->GetComponent("Transform"))->SetTranslation(Vector2D(150.0f, -150.0f));
+		static_cast<Transform*>(player->GetComponent("Transform"))->SetTranslation(Vector2D(900.0f, -300.0f));
 		objectManager.AddObject(*player);
 
 		GameObject* player2 = new GameObject(*objectManager.GetArchetypeByName("Player"));
 		Behaviors::PlayerMovement* player2Movement = static_cast<Behaviors::PlayerMovement*>(player2->GetComponent("PlayerMovement"));
 		player2Movement->SetKeybinds('W', 'A', 'D', VK_LCONTROL);
 		player2Movement->SetPlayerID(2);
-		static_cast<Transform*>(player2->GetComponent("Transform"))->SetTranslation(Vector2D(150.0f, -150.0f));
+		static_cast<Transform*>(player2->GetComponent("Transform"))->SetTranslation(Vector2D(2200.0f, -200.0f));
 		objectManager.AddObject(*player2);
 
 		// Play the player's animation.
@@ -340,7 +340,7 @@ namespace Levels
 
 		// Create winText and add to objectManager
 		GameObject* winText = new GameObject(*objectManager.GetArchetypeByName("Text"));
-		static_cast<SpriteText*>(winText->GetComponent("SpriteText"))->SetColor(Colors::Black);
+		static_cast<SpriteText*>(winText->GetComponent("SpriteText"))->SetColor(Colors::White);
 		objectManager.AddObject(*winText);
 	}
 
