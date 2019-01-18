@@ -118,7 +118,7 @@ namespace Levels
 		}
 
 		// Set the background color to black.
-		Graphics::GetInstance().SetBackgroundColor(Colors::White);
+		Graphics::GetInstance().SetBackgroundColor(Colors::Black);
 	}
 
 	// Initialize the memory associated with Level 1.
