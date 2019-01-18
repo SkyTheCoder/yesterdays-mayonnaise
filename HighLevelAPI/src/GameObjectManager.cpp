@@ -238,6 +238,10 @@ void GameObjectManager::CheckCollisions()
 		if (gameObjectActiveList[i]->IsDestroyed())
 			continue;
 
+		const char* name = gameObjectActiveList[i]->GetName().c_str();
+		if (strcmp(name, "Player") && strcmp(name, "Tilemap"))
+			continue;
+
 		// Get the current object's collider.
 		Collider* collider = static_cast<Collider*>(gameObjectActiveList[i]->GetComponent("Collider"));
 

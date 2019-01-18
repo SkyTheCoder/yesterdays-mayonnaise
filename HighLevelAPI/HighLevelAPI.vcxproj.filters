@@ -71,10 +71,10 @@
     <ClInclude Include="include\Tilemap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\Transform.h">
+    <ClInclude Include="include\Level.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\Level.h">
+    <ClInclude Include="include\Transform.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

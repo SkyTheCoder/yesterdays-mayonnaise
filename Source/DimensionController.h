@@ -63,6 +63,9 @@ namespace Behaviors
 		//   dimension = The dimension to make active.
 		void SetActiveDimension(unsigned dimension);
 
+		// Returns the active dimension.
+		unsigned GetActiveDimension();
+
 		// Adds a new dimension.
 		// Params:
 		//   tilemap = The game object with the tilemap for the dimension.

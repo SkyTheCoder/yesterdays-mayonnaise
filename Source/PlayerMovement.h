@@ -1,8 +1,8 @@
 //------------------------------------------------------------------------------
 //
 // File Name:	PlayerMovement.h
-// Author(s):	Jeremy Kings (j.kings)
-// Project:		BetaFramework
+// Author(s):	David Cohen (david.cohen)
+// Project:		Yesterday's Mayonnaise
 // Course:		WANIC VGP2 2018-2019
 //
 // Copyright © 2018 DigiPen (USA) Corporation.
@@ -67,15 +67,15 @@ namespace Behaviors
 		//   keyRight = The right keybind.
 		void SetKeybinds(unsigned keyUp, unsigned keyLeft, unsigned keyRight);
 
-		// Sets the player's ID
+		// Sets the player's ID.
 		// Params:
-		//   newID = The ID to set to
-		void setID(int newID);
+		//   newID = The ID to set to.
+		void SetID(int newID);
 
-		// Sets the player's ID
+		// Sets the player's ID.
 		// Returns:
-		//   The player's ID
-		int getID() const;
+		//   The player's ID.
+		int GetID() const;
 
 		// Map collision handler for Monkey objects.
 		// Params:
@@ -134,7 +134,8 @@ namespace Behaviors
 		float airTime;
 		float leftTime;
 		float rightTime;
-		float movementLerp;
+		float movementLerpGround;
+		float movementLerpAir;
 
 		friend class MonkeyAnimation;
 	};

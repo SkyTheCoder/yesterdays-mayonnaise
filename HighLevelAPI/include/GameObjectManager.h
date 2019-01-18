@@ -115,12 +115,12 @@ private:
 	//------------------------------------------------------------------------------
 	
 	// Objects
-	static const size_t maxObjects = 200;
+	static const size_t maxObjects = 4096;
 	GameObject* gameObjectActiveList[maxObjects];
 	size_t numObjects;
 	
 	// Archetypes
-	static const size_t maxArchetypes = 30;
+	static const size_t maxArchetypes = 64;
 	GameObject* gameObjectArchetypes[maxArchetypes];
 	size_t numArchetypes;
 	

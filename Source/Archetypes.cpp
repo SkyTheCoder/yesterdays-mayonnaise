@@ -266,7 +266,7 @@ namespace Archetypes
 		GameObject* tilemap = new GameObject("Tilemap");
 
 		// Create a new transform.
-		Transform* transform = new Transform(Vector2D(-350.0f, 250.0f), Vector2D(100.0f, 100.0f));
+		Transform* transform = new Transform(Vector2D(), Vector2D(100.0f, 100.0f));// Vector2D(-350.0f, 250.0f), Vector2D(100.0f, 100.0f));
 		tilemap->AddComponent(transform);
 
 		// Create a new sprite tilemap.
@@ -359,21 +359,22 @@ namespace Archetypes
 	//   spriteSource = The sprite source to use for the sprite.
 	// Returns:
 	//   A pointer to the newly constructed game archetype.
-	GameObject* CreateHazardArchetype(Mesh* mesh, SpriteSource* spriteSource)
+	GameObject* CreateHazardArchetype(std::string name, Mesh* mesh, SpriteSource* spriteSource, unsigned frame)
 	{
-		GameObject* Hazard = new GameObject("Hazard");
+		GameObject* Hazard = new GameObject(name);
 
 		// Create transform
 		Transform* transform = new Transform();
-		transform->SetScale(Vector2D(75.0f, 75.0f));
+		transform->SetScale(Vector2D(100.0f, 100.0f));
 
 		// Create sprite
 		Sprite* sprite = new Sprite();
 		sprite->SetMesh(mesh);
 		sprite->SetSpriteSource(spriteSource);
+		sprite->SetFrame(frame);
 
 		// Create collider
-		ColliderRectangle* colliderrect = new ColliderRectangle(transform->GetScale() / 2.0f);
+		ColliderRectangle* collider = new ColliderRectangle(transform->GetScale() / 2.0f - Vector2D(0.5f, 0.5f));
 
 		// Create hazard component
 		Behaviors::Hazard* hazard = new Behaviors::Hazard(false, true);
@@ -381,7 +382,7 @@ namespace Archetypes
 		// Add components
 		Hazard->AddComponent(transform);
 		Hazard->AddComponent(sprite);
-		Hazard->AddComponent(colliderrect);
+		Hazard->AddComponent(collider);
 		Hazard->AddComponent(hazard);
 
 		return Hazard;

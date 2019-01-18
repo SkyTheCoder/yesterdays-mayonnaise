@@ -73,17 +73,19 @@ namespace Behaviors
 	}
 
 	// Returns if the hazard is collidable
-	bool Hazard::isCollidable()
+	bool Hazard::IsCollidable()
 	{
 		return collidable;
 	}
 
-	// Changes whether the hazard is collidable or not
-	void Hazard::ChangeCollidablity()
+	// Changes whether the hazard is collidable or not.
+	// Params:
+	//   collidable = Whether the hazard is collidable.
+	void Hazard::SetCollidable(bool collidable_)
 	{
 		if (alwaysCollidable)
 			return;
-		collidable = !collidable;
+		collidable = collidable_;
 	}
 
 	// Collision handler for Hazard objects.
@@ -95,7 +97,8 @@ namespace Behaviors
 		if (other.GetName() == "Player")
 		{
 			if (static_cast<Hazard*>(object.GetComponent("Hazard"))->collidable)
-				Engine::GetInstance().Stop();
+				other.Destroy();
+				//Engine::GetInstance().Stop();
 		}
 	}
 }

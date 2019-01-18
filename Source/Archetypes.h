@@ -117,7 +117,7 @@ namespace Archetypes
 	//   spriteSource = The sprite source to use for the sprite.
 	// Returns:
 	//   A pointer to the newly constructed game archetype.
-	GameObject* CreateHazardArchetype(Mesh* mesh, SpriteSource* spriteSource);
+	GameObject* CreateHazardArchetype(std::string name, Mesh* mesh, SpriteSource* spriteSource, unsigned frame);
 }
 
 //----------------------------------------------------------------------------

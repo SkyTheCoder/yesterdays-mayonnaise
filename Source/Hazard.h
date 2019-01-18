@@ -53,11 +53,13 @@ namespace Behaviors
 		//   dt = The (fixed) change in time since the last step.
 		void Update(float dt) override;
 
-		// Returns if the hazard is collidable
-		bool isCollidable();
+		// Returns if the hazard is collidable.
+		bool IsCollidable();
 
-		// Changes whether the hazard is collidable or not
-		void ChangeCollidablity();
+		// Changes whether the hazard is collidable or not.
+		// Params:
+		//   collidable = Whether the hazard is collidable.
+		void SetCollidable(bool collidable);
 
 		// Collision handler for Hazard objects.
 		// Params:

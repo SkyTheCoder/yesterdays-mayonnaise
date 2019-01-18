@@ -26,7 +26,9 @@
 // Components
 #include <Transform.h>
 #include <Physics.h>
+#include <Sprite.h>
 #include <ColliderTilemap.h>
+#include "Hazard.h"
 
 //------------------------------------------------------------------------------
 
@@ -84,19 +86,29 @@ namespace Behaviors
 				continue;
 
 			static_cast<ColliderTilemap*>(dimensions[i].tilemap->GetComponent("Collider"))->SetActive(false);
+			static_cast<Sprite*>(dimensions[i].tilemap->GetComponent("Sprite"))->SetAlpha(0.5f);
 			for (GameObject* spike : dimensions[i].spikes)
 			{
 				UNREFERENCED_PARAMETER(spike);
-				//static_cast<Hazard*>(spike->GetComponent("Hazard"))->SetCollidable(false);
+				static_cast<Hazard*>(spike->GetComponent("Hazard"))->SetCollidable(false);
+				static_cast<Sprite*>(spike->GetComponent("Sprite"))->SetAlpha(0.5f);
 			}
 		}
 
 		static_cast<ColliderTilemap*>(dimensions[activeDimension].tilemap->GetComponent("Collider"))->SetActive(true);
+		static_cast<Sprite*>(dimensions[activeDimension].tilemap->GetComponent("Sprite"))->SetAlpha(1.0f);
 		for (GameObject* spike : dimensions[activeDimension].spikes)
 		{
 			UNREFERENCED_PARAMETER(spike);
-			//static_cast<Hazard*>(spike->GetComponent("Hazard"))->SetCollidable(true);
+			static_cast<Hazard*>(spike->GetComponent("Hazard"))->SetCollidable(true);
+			static_cast<Sprite*>(spike->GetComponent("Sprite"))->SetAlpha(1.0f);
 		}
+	}
+
+	// Returns the active dimension.
+	unsigned DimensionController::GetActiveDimension()
+	{
+		return activeDimension;
 	}
 
 	// Adds a new dimension.

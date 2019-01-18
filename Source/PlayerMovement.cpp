@@ -2,7 +2,7 @@
 //
 // File Name:	PlayerMovement.cpp
 // Author(s):	David Cohen (david.cohen)
-// Project:		BetaFramework
+// Project:		Yesterday's Mayonnaise
 // Course:		WANIC VGP2 2018-2019
 //
 // Copyright © 2018 DigiPen (USA) Corporation.
@@ -90,11 +90,12 @@ namespace Behaviors
 	// Constructor
 	PlayerMovement::PlayerMovement(unsigned keyUp, unsigned keyLeft, unsigned keyRight) : Component("PlayerMovement"),
 		keyUp(keyUp), keyLeft(keyLeft), keyRight(keyRight),
-		monkeyWalkSpeed(250.0f), jumpSpeed(0.0f, 800.0f), slidingJumpSpeed(600.0f, 500.0f),
+		monkeyWalkSpeed(350.0f), jumpSpeed(0.0f, 850.0f), slidingJumpSpeed(600.0f, 675.0f),
 		gravity(0.0f, -1200.0f), slidingGravity(0.0f, -600.0f), terminalVelocity(700.0f), slidingTerminalVelocity(150.0f), gracePeriod(0.15f),
 		transform(nullptr), physics(nullptr),
+		playerID(0),
 		onGround(false), onLeftWall(false), onRightWall(false),
-		hasJumped(false), airTime(0.0f), leftTime(0.0f), rightTime(0.0f), movementLerp(0.96f)
+		hasJumped(false), airTime(0.0f), leftTime(0.0f), rightTime(0.0f), movementLerpGround(0.95f), movementLerpAir(0.8f)
 	{
 	}
 
@@ -146,18 +147,18 @@ namespace Behaviors
 		keyRight = keyRight_;
 	}
 
-	// Sets the player's ID
+	// Sets the player's ID.
 	// Params:
-	//   newID = The ID to set to
-	void PlayerMovement::setID(int newID)
+	//   newID = The ID to set to.
+	void PlayerMovement::SetID(int newID)
 	{
 		playerID = newID;
 	}
 
-	// Sets the player's ID
+	// Sets the player's ID.
 	// Returns:
-	//   The player's ID
-	int PlayerMovement::getID() const
+	//   The player's ID.
+	int PlayerMovement::GetID() const
 	{
 		return playerID;
 	}
@@ -189,7 +190,7 @@ namespace Behaviors
 		}
 
 		// Smoothly interpolate the X component of the player's velocity.
-		float movementMix = 1.0f - pow(1.0f - movementLerp, dt);
+		float movementMix = 1.0f - pow(1.0f - (airTime <= gracePeriod ? movementLerpGround : movementLerpAir), dt);
 		velocity.x = Interpolate(velocity.x, targetVelocityX, movementMix);
 
 		// Set the velocity.
