@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 //
 // File Name:	PlayerMovement.cpp
-// Author(s):	David Cohen (david.cohen) and A.J. Bussman (anthony.bussman)
+// Author(s):	David Cohen (david.cohen)
 // Project:		Yesterday's Mayonnaise
 // Course:		WANIC VGP2 2018-2019
 //
@@ -27,8 +27,6 @@
 #include "Transform.h"
 #include "Physics.h"
 #include "Collider.h"
-#include "DimensionController.h"
-#include "ChipCollectible.h"
 
 //------------------------------------------------------------------------------
 
@@ -76,24 +74,15 @@ namespace Behaviors
 	//   other  = The object the monkey is colliding with.
 	void MonkeyCollisionHandler(GameObject& object, GameObject& other)
 	{
-		// Get the PlayerMovement component.
-		PlayerMovement* playerMovement = static_cast<PlayerMovement*>(object.GetComponent("PlayerMovement"));
-
 		// Destroy collectibles when touching.
 		if (other.GetName() == "Collectible")
 		{
-			ChipCollectible* collectible = static_cast<ChipCollectible*>(other.GetComponent("ChipCollectible"));
-
-			// if chips are active, get more switcheroos and deactive the chips
-			if (collectible->IsActive())
-			{
-				playerMovement->chips += 5;
-				collectible->SetActive(false);
-			}
+			other.Destroy();
 		}
 
 		if (other.GetName() == "JumpBoost" || other.GetName() == "SpeedBoost")
 		{
+			Behaviors::PlayerMovement* playerMovement = static_cast<Behaviors::PlayerMovement*>(object.GetComponent("PlayerMovement"));
 			if (other.GetName() == "JumpBoost")
 				playerMovement->SetPowerUp(POWER_UP_JUMP);
 			else if (other.GetName() == "SpeedBoost")
@@ -103,15 +92,22 @@ namespace Behaviors
 
 			other.Destroy();
 		}
+
+		// Restart the level when touching hazards or enemies.
+		if (other.GetName() == "Hazard" || other.GetName() == "Enemy")
+		{
+			object.Destroy();
+		}
 	}
 
 	// Constructor
-	PlayerMovement::PlayerMovement(unsigned keyUp, unsigned keyLeft, unsigned keyRight, unsigned keySwitch) : Component("PlayerMovement"),
-		keyUp(keyUp), keyLeft(keyLeft), keyRight(keyRight), keySwitch(keySwitch),
-		walkSpeed(350.0f), walkSpeedOld(walkSpeed), jumpSpeed(0.0f, 850.0f), jumpSpeedOld(jumpSpeed), slidingJumpSpeed(600.0f, 675.0f),
+	PlayerMovement::PlayerMovement(unsigned keyUp, unsigned keyLeft, unsigned keyRight) : Component("PlayerMovement"),
+		keyUp(keyUp), keyLeft(keyLeft), keyRight(keyRight),
+		monkeyWalkSpeedOG(350.0f), jumpSpeedOG(0.0f, 850.0f), slidingJumpSpeed(600.0f, 675.0f),
+		monkeyWalkSpeed(monkeyWalkSpeedOG), jumpSpeed(jumpSpeedOG),
 		gravity(0.0f, -1200.0f), slidingGravity(0.0f, -600.0f), terminalVelocity(700.0f), slidingTerminalVelocity(150.0f), gracePeriod(0.15f),
 		transform(nullptr), physics(nullptr),
-		playerID(0), chips(0),
+		playerID(0),
 		onGround(false), onLeftWall(false), onRightWall(false),
 		hasJumped(false), airTime(0.0f), leftTime(0.0f), rightTime(0.0f), movementLerpGround(0.95f), movementLerpAir(0.8f),
 		powerUp(POWER_UP_NONE), PUTimer(0.0f), PUMaxTime(5.0f), jumpBoost(0.0f, 950.0f), speedBoost(425.0f)
@@ -161,17 +157,6 @@ namespace Behaviors
 
 		// Handle vertical movement.
 		MoveVertical(dt);
-
-		GameObject* gameController = GetOwner()->GetSpace()->GetObjectManager().GetObjectByName("GameController");
-		DimensionController& dimensionController = *static_cast<DimensionController*>(gameController->GetComponent("DimensionController"));
-
-		Input& input = Input::GetInstance();
-		if (input.CheckTriggered(keySwitch) && chips > 0 && dimensionController.GetSwitchCooldown() <= 0.0f)
-		{
-			unsigned newDimension = (dimensionController.GetActiveDimension() + 1) % dimensionController.GetDimensionCount();
-			dimensionController.SetActiveDimension(newDimension);
-			--chips;
-		}
 	}
 
 	// Sets the keybinds for the monkey.
@@ -179,18 +164,17 @@ namespace Behaviors
 	//   keyUp = The up keybind.
 	//   keyLeft = The left keybind.
 	//   keyRight = The right keybind.
-	void PlayerMovement::SetKeybinds(unsigned keyUp_, unsigned keyLeft_, unsigned keyRight_, unsigned keySwitch_)
+	void PlayerMovement::SetKeybinds(unsigned keyUp_, unsigned keyLeft_, unsigned keyRight_)
 	{
 		keyUp = keyUp_;
 		keyLeft = keyLeft_;
 		keyRight = keyRight_;
-		keySwitch = keySwitch_;
 	}
 
 	// Sets the player's ID.
 	// Params:
 	//   newID = The ID to set to.
-	void PlayerMovement::SetPlayerID(int newID)
+	void PlayerMovement::SetID(int newID)
 	{
 		playerID = newID;
 	}
@@ -198,13 +182,13 @@ namespace Behaviors
 	// Sets the player's ID.
 	// Returns:
 	//   The player's ID.
-	int PlayerMovement::GetPlayerID() const
+	int PlayerMovement::GetID() const
 	{
 		return playerID;
 	}
 
 	// Returns current powerUp
-	PowerUp PlayerMovement::GetPowerUp() const
+	PowerUp PlayerMovement::GetPowerUp()
 	{
 		return powerUp;
 	}
@@ -218,11 +202,11 @@ namespace Behaviors
 		if (powerUp == POWER_UP_JUMP)
 			jumpSpeed = jumpBoost;
 		else if (powerUp == POWER_UP_SPEED)
-			walkSpeed = speedBoost;
+			monkeyWalkSpeed = speedBoost;
 		else
 		{
-			jumpSpeed = jumpSpeedOld;
-			walkSpeed = walkSpeedOld;
+			jumpSpeed = jumpSpeedOG;
+			monkeyWalkSpeed = monkeyWalkSpeedOG;
 		}
 	}
 
@@ -249,13 +233,13 @@ namespace Behaviors
 		// If the right arrow key is pressed, move to the right.
 		if (input.CheckHeld(keyRight))
 		{
-			targetVelocityX += walkSpeed;
+			targetVelocityX += monkeyWalkSpeed;
 		}
 
 		// If the right arrow key is pressed, move to the left.
 		if (input.CheckHeld(keyLeft))
 		{
-			targetVelocityX -= walkSpeed;
+			targetVelocityX -= monkeyWalkSpeed;
 		}
 
 		// Smoothly interpolate the X component of the player's velocity.

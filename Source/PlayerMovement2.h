@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 //
 // File Name:	PlayerMovement.h
-// Author(s):	David Cohen (david.cohen) and A.J. Bussman (anthony.bussman)
+// Author(s):	David Cohen (david.cohen)
 // Project:		Yesterday's Mayonnaise
 // Course:		WANIC VGP2 2018-2019
 //
@@ -51,7 +51,7 @@ namespace Behaviors
 		//------------------------------------------------------------------------------
 
 		// Constructor
-		PlayerMovement(unsigned keyUp, unsigned keyLeft, unsigned keyRight, unsigned keySwitch);
+		PlayerMovement(unsigned keyUp, unsigned keyLeft, unsigned keyRight);
 
 		// Clone a component and return a pointer to the cloned component.
 		// Returns:
@@ -71,20 +71,20 @@ namespace Behaviors
 		//   keyUp = The up keybind.
 		//   keyLeft = The left keybind.
 		//   keyRight = The right keybind.
-		void SetKeybinds(unsigned keyUp, unsigned keyLeft, unsigned keyRight, unsigned keySwitch);
+		void SetKeybinds(unsigned keyUp, unsigned keyLeft, unsigned keyRight);
 
 		// Sets the player's ID.
 		// Params:
 		//   newID = The ID to set to.
-		void SetPlayerID(int newID);
+		void SetID(int newID);
 
 		// Sets the player's ID.
 		// Returns:
 		//   The player's ID.
-		int GetPlayerID() const;
+		int GetID() const;
 
 		// Returns current powerUp
-		PowerUp GetPowerUp() const;
+		PowerUp GetPowerUp();
 
 		// Sets current powerUp
 		// Default is no powerUp
@@ -125,13 +125,12 @@ namespace Behaviors
 		unsigned keyUp;
 		unsigned keyLeft;
 		unsigned keyRight;
-		unsigned keySwitch;
 
 		// Movement properties
-		float walkSpeed;
-		float walkSpeedOld;
+		float monkeyWalkSpeedOG;
+		float monkeyWalkSpeed;
+		Vector2D jumpSpeedOG;
 		Vector2D jumpSpeed;
-		Vector2D jumpSpeedOld;
 		Vector2D slidingJumpSpeed;
 		Vector2D gravity;
 		Vector2D slidingGravity;
@@ -145,7 +144,6 @@ namespace Behaviors
 
 		// Misc
 		int playerID;
-		int chips;
 
 		bool onGround;
 		bool onLeftWall;

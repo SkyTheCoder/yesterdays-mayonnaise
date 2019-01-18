@@ -57,60 +57,6 @@ namespace Archetypes
 	// Public Functions:
 	//------------------------------------------------------------------------------
 
-	// Create the ship game object.
-	// Params:
-	//   mesh  = The mesh to use for the object's sprite.
-	// Returns:
-	//	 A pointer to the newly constructed game object
-	GameObject* CreateShip(Mesh* mesh)
-	{
-		// Create a new game object.
-		GameObject* ship = new GameObject("Ship");
-		
-		// Create a new transform.
-		ship->AddComponent(new Transform(Vector2D(), Vector2D(50.0f, 50.0f)));
-
-		// Create a new sprite.
-		Sprite* sprite = new Sprite();
-		sprite->SetMesh(mesh);
-		ship->AddComponent(sprite);
-
-		// Create a new physics.
-		ship->AddComponent(new Physics());
-
-		// Create a new player ship.
-		ship->AddComponent(new Behaviors::PlayerShip(100.0f, 100.0f, static_cast<float>(M_PI), 200.0f));
-
-		return ship;
-	}
-
-	// Create the archetype for the bullet object.
-	// Params:
-	//   mesh  = The mesh to use for the object's sprite.
-	// Returns:
-	//	 A pointer to the newly constructed game object
-	GameObject* CreateBulletArchetype(Mesh* mesh)
-	{
-		// Create a new game object.
-		GameObject* bullet = new GameObject("Bullet");
-
-		// Create a new transform.
-		bullet->AddComponent(new Transform(Vector2D(), Vector2D(7.0f, 7.0f)));
-
-		// Create a new sprite.
-		Sprite* sprite = new Sprite();
-		sprite->SetMesh(mesh);
-		bullet->AddComponent(sprite);
-
-		// Create a new physics.
-		bullet->AddComponent(new Physics());
-
-		// Create a new timed death.
-		bullet->AddComponent(new Behaviors::TimedDeath(5.0f));
-
-		return bullet;
-	}
-
 	// Create the player game object.
 	// Params:
 	//   mesh  = The mesh to use for the object's sprite.
@@ -147,111 +93,6 @@ namespace Archetypes
 		player->AddComponent(new Behaviors::MonkeyAnimation(0, 8, 9, 12));
 
 		return player;
-	}
-
-	// Create the circle game object.
-	// Params:
-	//   mesh  = The mesh to use for the object's sprite.
-	//   spriteSource = The sprite source to use for the object.
-	// Returns:
-	//	 A pointer to the newly constructed game object
-	GameObject* CreateCircle(Mesh* mesh, SpriteSource* spriteSource)
-	{
-		// Create a new game object.
-		GameObject* circle = new GameObject("Circle");
-
-		// Create a new transform.
-		Transform* transform = new Transform(Vector2D(), Vector2D(100.0f, 100.0f));
-		circle->AddComponent(transform);
-
-		// Create a new sprite.
-		Sprite* sprite = new Sprite();
-		sprite->SetMesh(mesh);
-		sprite->SetSpriteSource(spriteSource);
-		circle->AddComponent(sprite);
-
-		// Create a new physics.
-		circle->AddComponent(new Physics());
-
-		// Create a new circle collider.
-		circle->AddComponent(new ColliderCircle(transform->GetScale().x / 2.0f));
-
-		// Create a new color change.
-		circle->AddComponent(new Behaviors::ColorChange(Colors::Yellow, Colors::Red));
-
-		// Create a new screen wrap.
-		circle->AddComponent(new Behaviors::ScreenWrap());
-
-		return circle;
-	}
-
-	// Create the point game object.
-	// Params:
-	//   mesh  = The mesh to use for the object's sprite.
-	//   spriteSource = The sprite source to use for the object.
-	// Returns:
-	//	 A pointer to the newly constructed game object
-	GameObject* CreatePoint(Mesh* mesh, SpriteSource* spriteSource)
-	{
-		// Create a new game object.
-		GameObject* point = new GameObject("Point");
-
-		// Create a new transform.
-		point->AddComponent(new Transform(Vector2D(), Vector2D(20.0f, 20.0f)));
-
-		// Create a new sprite.
-		Sprite* sprite = new Sprite();
-		sprite->SetMesh(mesh);
-		sprite->SetSpriteSource(spriteSource);
-		point->AddComponent(sprite);
-
-		// Create a new physics.
-		point->AddComponent(new Physics());
-
-		// Create a new point collider.
-		point->AddComponent(new ColliderPoint());
-
-		// Create a new color change.
-		point->AddComponent(new Behaviors::ColorChange(Colors::Blue, Colors::Red));
-
-		// Create a new screen wrap.
-		point->AddComponent(new Behaviors::ScreenWrap());
-
-		return point;
-	}
-
-	// Create the rectangle game object.
-	// Params:
-	//   mesh  = The mesh to use for the object's sprite.
-	// Returns:
-	//	 A pointer to the newly constructed game object
-	GameObject* CreateRectangle(Mesh* mesh)
-	{
-		// Create a new game object.
-		GameObject* rectangle = new GameObject("Rectangle");
-
-		// Create a new transform.
-		Transform* transform = new Transform(Vector2D(), Vector2D(250.0f, 100.0f));
-		rectangle->AddComponent(transform);
-
-		// Create a new sprite.
-		Sprite* sprite = new Sprite();
-		sprite->SetMesh(mesh);
-		rectangle->AddComponent(sprite);
-
-		// Create a new physics.
-		rectangle->AddComponent(new Physics());
-
-		// Create a new rectangle collider.
-		rectangle->AddComponent(new ColliderRectangle(transform->GetScale() / 2.0f));
-
-		// Create a new color change.
-		rectangle->AddComponent(new Behaviors::ColorChange(Colors::Green, Colors::Red));
-
-		// Create a new screen wrap.
-		rectangle->AddComponent(new Behaviors::ScreenWrap());
-
-		return rectangle;
 	}
 
 	// Create a tilemap object
@@ -360,8 +201,10 @@ namespace Archetypes
 
 	// Create a hazard archetype
 	// Params:
+	//   name = The name of the hazard.
 	//   mesh = The mesh to use for the sprite.
 	//   spriteSource = The sprite source to use for the sprite.
+	//   frame = The frame in the hazards spritesheet to use.
 	// Returns:
 	//   A pointer to the newly constructed game archetype.
 	GameObject* CreateHazardArchetype(std::string name, Mesh* mesh, SpriteSource* spriteSource, unsigned frame)
@@ -391,6 +234,66 @@ namespace Archetypes
 		Hazard->AddComponent(hazard);
 
 		return Hazard;
+	}
+
+	// Create a jump boost archetype
+	// Params:
+	//   mesh = The mesh to use for the sprite.
+	//   spriteSource = The sprite source to use for the sprite.
+	// Returns:
+	//   A pointer to the newly constructed game archetype.
+	GameObject* CreateJumpBoostArchetype(Mesh* mesh, SpriteSource* spriteSource)
+	{
+		GameObject* JumpBoost = new GameObject("JumpBoost");
+
+		// Create transform
+		Transform* transform = new Transform();
+		transform->SetScale(Vector2D(50.0f, 50.0f));
+
+		// Create sprite
+		Sprite* sprite = new Sprite();
+		sprite->SetMesh(mesh);
+		sprite->SetSpriteSource(spriteSource);
+
+		// Create collider
+		ColliderCircle* collider = new ColliderCircle(transform->GetScale().x / 2.0f - 0.5f);
+
+		// Add components
+		JumpBoost->AddComponent(transform);
+		JumpBoost->AddComponent(sprite);
+		JumpBoost->AddComponent(collider);
+
+		return JumpBoost;
+	}
+
+	// Create a speed boost archetype
+	// Params:
+	//   mesh = The mesh to use for the sprite.
+	//   spriteSource = The sprite source to use for the sprite.
+	// Returns:
+	//   A pointer to the newly constructed game archetype.
+	GameObject* CreateSpeedBoostArchetype(Mesh* mesh, SpriteSource* spriteSource)
+	{
+		GameObject* SpeedBoost = new GameObject("SpeedBoost");
+
+		// Create transform
+		Transform* transform = new Transform();
+		transform->SetScale(Vector2D(50.0f, 50.0f));
+
+		// Create sprite
+		Sprite* sprite = new Sprite();
+		sprite->SetMesh(mesh);
+		sprite->SetSpriteSource(spriteSource);
+
+		// Create collider
+		ColliderCircle* collider = new ColliderCircle(transform->GetScale().x / 2.0f - 0.5f);
+
+		// Add components
+		SpeedBoost->AddComponent(transform);
+		SpeedBoost->AddComponent(sprite);
+		SpeedBoost->AddComponent(collider);
+
+		return SpeedBoost;
 	}
 }
 
