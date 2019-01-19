@@ -60,11 +60,11 @@ namespace Levels
 		columnsMonkey(3), rowsMonkey(5),
 		meshGenericQuad(nullptr),
 		textureCollectible(nullptr), spriteSourceCollectible(nullptr),
-		meshSpikes(nullptr), textureSpikes(nullptr), spriteSourceSpikes(nullptr), columnsSpikes(1), rowsSpikes(5),
+		meshSpikes(nullptr), textureSpikes(nullptr), spriteSourceSpikes(nullptr), columnsSpikes(1), rowsSpikes(3),
 		dataStaticMap(nullptr), dataRedMap(nullptr), dataBlueMap(nullptr),
 		textureStaticMap(nullptr), textureRedMap(nullptr), textureBlueMap(nullptr),
 		spriteSourceStaticMap(nullptr), spriteSourceRedMap(nullptr), spriteSourceBlueMap(nullptr),
-		meshMap(nullptr), columnsMap(4), rowsMap(3)
+		meshMap(nullptr), columnsMap(2), rowsMap(2)
 	{
 	}
 
@@ -83,12 +83,12 @@ namespace Levels
 		meshGenericQuad = CreateQuadMesh(Vector2D(1.0f, 1.0f), Vector2D(0.5f, 0.5f));
 
 		// Load collectible assets
-		textureCollectible = Texture::CreateTextureFromFile("collectible.png");
+		textureCollectible = Texture::CreateTextureFromFile("Collectible.png");
 		spriteSourceCollectible = new SpriteSource(1, 1, textureCollectible);
 
 		// Load spike assets
 		meshSpikes = CreateQuadMesh(Vector2D(1.0f / columnsSpikes, 1.0f / rowsSpikes), Vector2D(0.5f, 0.5f));
-		textureSpikes = Texture::CreateTextureFromFile("spikes.png");
+		textureSpikes = Texture::CreateTextureFromFile("Spikes.png");
 		spriteSourceSpikes = new SpriteSource(columnsSpikes, rowsSpikes, textureSpikes);
 
 		// Load the tilemaps.
@@ -132,26 +132,28 @@ namespace Levels
 		objectManager.AddArchetype(*Archetypes::CreateGameController());
 		objectManager.AddArchetype(*Archetypes::CreateCollectibleArchetype(meshGenericQuad, spriteSourceCollectible));
 		objectManager.AddArchetype(*Archetypes::CreateHazardArchetype("StaticSpike", meshSpikes, spriteSourceSpikes, 0));
-		objectManager.AddArchetype(*Archetypes::CreateHazardArchetype("RedSpike", meshSpikes, spriteSourceSpikes, 2));
-		objectManager.AddArchetype(*Archetypes::CreateHazardArchetype("BlueSpike", meshSpikes, spriteSourceSpikes, 1));
+		objectManager.AddArchetype(*Archetypes::CreateHazardArchetype("RedSpike", meshSpikes, spriteSourceSpikes, 1));
+		objectManager.AddArchetype(*Archetypes::CreateHazardArchetype("BlueSpike", meshSpikes, spriteSourceSpikes, 2));
 
-		// Create the player and add it to the object manager.
+		// Create the players and add them to the object manager.
 		GameObject* player = new GameObject(*objectManager.GetArchetypeByName("Player"));
 		Behaviors::PlayerMovement* playerMovement = static_cast<Behaviors::PlayerMovement*>(player->GetComponent("PlayerMovement"));
 		playerMovement->SetPlayerID(1);
 		static_cast<Transform*>(player->GetComponent("Transform"))->SetTranslation(Vector2D(900.0f, -300.0f));
+		//static_cast<Transform*>(player->GetComponent("Transform"))->SetTranslation(Vector2D(600.0f, -2600.0f));
+		//static_cast<Transform*>(player->GetComponent("Transform"))->SetTranslation(Vector2D(300.0f, -200.0f));
 		objectManager.AddObject(*player);
 
 		GameObject* player2 = new GameObject(*objectManager.GetArchetypeByName("Player"));
 		Behaviors::PlayerMovement* player2Movement = static_cast<Behaviors::PlayerMovement*>(player2->GetComponent("PlayerMovement"));
 		player2Movement->SetKeybinds('W', 'A', 'D', VK_LCONTROL);
 		player2Movement->SetPlayerID(2);
-		static_cast<Transform*>(player2->GetComponent("Transform"))->SetTranslation(Vector2D(2200.0f, -200.0f));
+		static_cast<Transform*>(player2->GetComponent("Transform"))->SetTranslation(Vector2D(2200.0f, -200.0f));	
+		//static_cast<Transform*>(player2->GetComponent("Transform"))->SetTranslation(Vector2D(2300.0f, -2700.0f));
+		//static_cast<Transform*>(player2->GetComponent("Transform"))->SetTranslation(Vector2D(2800.0f, -200.0f));
 		objectManager.AddObject(*player2);
 
-		// Play the player's animation.
-		static_cast<Animation*>(player->GetComponent("Animation"))->Play(0, 8, 0.2f, true);
-
+		// Create the Game Controller, which handles the camera and dimensions.
 		GameObject* gameController = new GameObject(*objectManager.GetArchetypeByName("GameController"));
 		static_cast<Behaviors::CameraFollow*>(gameController->GetComponent("CameraFollow"))->AddPlayer(player);
 		static_cast<Behaviors::CameraFollow*>(gameController->GetComponent("CameraFollow"))->AddPlayer(player2);
@@ -171,6 +173,8 @@ namespace Levels
 			GameObject* tilemapBlue = Archetypes::CreateTilemapObject(meshMap, spriteSourceBlueMap, dataBlueMap);
 			objectManager.AddObject(*tilemapBlue);
 			unsigned blueDimension = dimensionController.AddDimension(tilemapBlue);
+
+			// Map data (spikes, collectibles, etc.) - this will be separated into a much neater format for the final level select screen!
 
 #if 0
 			// Level: Arena3.
@@ -239,13 +243,13 @@ namespace Levels
 				objectManager.AddObject(*spike);
 			}
 
-			float redSpikes[74] = {
+			float redSpikes[66] = {
 				26.0f, 8.0f, 27.0f, 8.0f, 28.0f, 8.0f, 29.0f, 8.0f, 30.0f, 8.0f, 1.0f, 13.0f, 2.0f, 13.0f, 3.0f, 13.0f, 4.0f, 13.0f, 5.0f, 13.0f, 30.0f, 14.0f, 30.0f, 15.0f, 30.0f, 16.0f, 30.0f, 17.0f, 14.0f, 18.0f, 15.0f, 18.0f,
-				30.0f, 18.0f, 28.0f, 19.0f, 29.0f, 19.0f, 30.0f, 19.0f, 28.0f, 20.0f, 29.0f, 20.0f, 30.0f, 20.0f, 28.0f, 21.0f, 29.0f, 21.0f, 30.0f, 21.0f, 30.0f, 22.0f, 16.0f, 23.0f, 17.0f, 23.0f, 30.0f, 23.0f, 30.0f, 24.0f, 30.0f, 25.0f,
-				30.0f, 26.0f, 30.0f, 27.0f, 30.0f, 28.0f, 30.0f, 29.0f, 30.0f, 30.0f
+				30.0f, 18.0f, 30.0f, 19.0f, 30.0f, 20.0f, 28.0f, 21.0f, 29.0f, 21.0f, 30.0f, 21.0f, 30.0f, 22.0f, 16.0f, 23.0f, 17.0f, 23.0f, 30.0f, 23.0f, 30.0f, 24.0f, 30.0f, 25.0f, 30.0f, 26.0f, 30.0f, 27.0f, 30.0f, 28.0f, 30.0f, 29.0f,
+				30.0f, 30.0f
 			};
 
-			for (int i = 0; i < 74; i += 2)
+			for (int i = 0; i < 66; i += 2)
 			{
 				GameObject* spike = new GameObject(*objectManager.GetArchetypeByName("RedSpike"));
 				static_cast<Transform*>(spike->GetComponent("Transform"))->SetTranslation(Vector2D(redSpikes[i] * 100.0f, redSpikes[i + 1] * -100.0f));
@@ -253,13 +257,13 @@ namespace Levels
 				objectManager.AddObject(*spike);
 			}
 
-			float blueSpikes[74] = {
+			float blueSpikes[66] = {
 				1.0f, 8.0f, 2.0f, 8.0f, 3.0f, 8.0f, 4.0f, 8.0f, 5.0f, 8.0f, 26.0f, 13.0f, 27.0f, 13.0f, 28.0f, 13.0f, 29.0f, 13.0f, 30.0f, 13.0f, 1.0f, 14.0f, 1.0f, 15.0f, 1.0f, 16.0f, 1.0f, 17.0f, 1.0f, 18.0f, 16.0f, 18.0f,
-				17.0f, 18.0f, 1.0f, 19.0f, 2.0f, 19.0f, 3.0f, 19.0f, 1.0f, 20.0f, 2.0f, 20.0f, 3.0f, 20.0f, 1.0f, 21.0f, 2.0f, 21.0f, 3.0f, 21.0f, 1.0f, 22.0f, 1.0f, 23.0f, 14.0f, 23.0f, 15.0f, 23.0f, 1.0f, 24.0f, 1.0f, 25.0f,
-				1.0f, 26.0f, 1.0f, 27.0f, 1.0f, 28.0f, 1.0f, 29.0f, 1.0f, 30.0f
+				17.0f, 18.0f, 1.0f, 19.0f, 1.0f, 20.0f, 1.0f, 21.0f, 2.0f, 21.0f, 3.0f, 21.0f, 1.0f, 22.0f, 1.0f, 23.0f, 14.0f, 23.0f, 15.0f, 23.0f, 1.0f, 24.0f, 1.0f, 25.0f, 1.0f, 26.0f, 1.0f, 27.0f, 1.0f, 28.0f, 1.0f, 29.0f,
+				1.0f, 30.0f
 			};
 
-			for (int i = 0; i < 74; i += 2)
+			for (int i = 0; i < 66; i += 2)
 			{
 				GameObject* spike = new GameObject(*objectManager.GetArchetypeByName("BlueSpike"));
 				static_cast<Transform*>(spike->GetComponent("Transform"))->SetTranslation(Vector2D(blueSpikes[i] * 100.0f, blueSpikes[i + 1] * -100.0f));
@@ -325,6 +329,61 @@ namespace Levels
 
 			float chipsSpawns[8] = {
 				6.0f, 6.0f, 25.0f, 6.0f, 4.0f, 21.0f, 27.0f, 21.0f
+			};
+
+			for (int i = 0; i < 8; i += 2)
+			{
+				GameObject* chips = new GameObject(*objectManager.GetArchetypeByName("Collectible"));
+				static_cast<Transform*>(chips->GetComponent("Transform"))->SetTranslation(Vector2D(chipsSpawns[i] * 100.0f, chipsSpawns[i + 1] * -100.0f));
+				objectManager.AddObject(*chips);
+			}
+
+
+#endif
+
+#if 0
+			// Level: Separation.
+			// Map data automatically generated by Processing.
+			// Each pair of floats in an array is a coordinate for a tile, in tilemap space.
+
+			float staticSpikes[60] = {
+				1.0f, 31.0f, 2.0f, 31.0f, 3.0f, 31.0f, 4.0f, 31.0f, 5.0f, 31.0f, 6.0f, 31.0f, 7.0f, 31.0f, 8.0f, 31.0f, 9.0f, 31.0f, 10.0f, 31.0f, 11.0f, 31.0f, 12.0f, 31.0f, 13.0f, 31.0f, 14.0f, 31.0f, 15.0f, 31.0f, 16.0f, 31.0f,
+				17.0f, 31.0f, 18.0f, 31.0f, 19.0f, 31.0f, 20.0f, 31.0f, 21.0f, 31.0f, 22.0f, 31.0f, 23.0f, 31.0f, 24.0f, 31.0f, 25.0f, 31.0f, 26.0f, 31.0f, 27.0f, 31.0f, 28.0f, 31.0f, 29.0f, 31.0f, 30.0f, 31.0f
+			};
+
+			for (int i = 0; i < 60; i += 2)
+			{
+				GameObject* spike = new GameObject(*objectManager.GetArchetypeByName("StaticSpike"));
+				static_cast<Transform*>(spike->GetComponent("Transform"))->SetTranslation(Vector2D(staticSpikes[i] * 100.0f, staticSpikes[i + 1] * -100.0f));
+				objectManager.AddObject(*spike);
+			}
+
+			float redSpikes[16] = {
+				10.0f, 15.0f, 11.0f, 15.0f, 20.0f, 15.0f, 21.0f, 15.0f, 10.0f, 16.0f, 11.0f, 16.0f, 20.0f, 16.0f, 21.0f, 16.0f
+			};
+
+			for (int i = 0; i < 16; i += 2)
+			{
+				GameObject* spike = new GameObject(*objectManager.GetArchetypeByName("RedSpike"));
+				static_cast<Transform*>(spike->GetComponent("Transform"))->SetTranslation(Vector2D(redSpikes[i] * 100.0f, redSpikes[i + 1] * -100.0f));
+				dimensionController.AddSpikeToDimension(redDimension, spike);
+				objectManager.AddObject(*spike);
+			}
+
+			float blueSpikes[32] = {
+				3.0f, 15.0f, 28.0f, 15.0f, 3.0f, 16.0f, 28.0f, 16.0f, 3.0f, 17.0f, 28.0f, 17.0f, 3.0f, 18.0f, 28.0f, 18.0f, 3.0f, 21.0f, 28.0f, 21.0f, 3.0f, 22.0f, 28.0f, 22.0f, 3.0f, 23.0f, 28.0f, 23.0f, 3.0f, 24.0f, 28.0f, 24.0f
+			};
+
+			for (int i = 0; i < 32; i += 2)
+			{
+				GameObject* spike = new GameObject(*objectManager.GetArchetypeByName("BlueSpike"));
+				static_cast<Transform*>(spike->GetComponent("Transform"))->SetTranslation(Vector2D(blueSpikes[i] * 100.0f, blueSpikes[i + 1] * -100.0f));
+				dimensionController.AddSpikeToDimension(blueDimension, spike);
+				objectManager.AddObject(*spike);
+			}
+
+			float chipsSpawns[8] = {
+				11.0f, 11.0f, 20.0f, 11.0f, 5.0f, 20.0f, 26.0f, 20.0f
 			};
 
 			for (int i = 0; i < 8; i += 2)

@@ -92,6 +92,7 @@ namespace Behaviors
 			}
 		}
 
+		// Jump & speed boost powerups
 		if (other.GetName() == "JumpBoost" || other.GetName() == "SpeedBoost")
 		{
 			if (other.GetName() == "JumpBoost")
@@ -165,9 +166,11 @@ namespace Behaviors
 		GameObject* gameController = GetOwner()->GetSpace()->GetObjectManager().GetObjectByName("GameController");
 		DimensionController& dimensionController = *static_cast<DimensionController*>(gameController->GetComponent("DimensionController"));
 
+		// Switch dimensions when pressing the key, there are unused chips, and dimension switching is not on cooldown.
 		Input& input = Input::GetInstance();
 		if (input.CheckTriggered(keySwitch) && chips > 0 && dimensionController.GetSwitchCooldown() <= 0.0f)
 		{
+			// Calculate next dimension ID
 			unsigned newDimension = (dimensionController.GetActiveDimension() + 1) % dimensionController.GetDimensionCount();
 			dimensionController.SetActiveDimension(newDimension);
 			--chips;
@@ -333,6 +336,7 @@ namespace Behaviors
 		// Apply gravity if in air.
 		if (!onGround)
 		{
+			// Use different gravity when sliding
 			if (isSliding)
 			{
 				if (velocity.y > 0.0f)

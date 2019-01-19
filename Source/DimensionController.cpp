@@ -88,21 +88,23 @@ namespace Behaviors
 
 		activeDimension = dimension;
 
+		// Make all non-active dimensions transparent and non-collidable.
 		for (unsigned i = 0; i < dimensions.size(); i++)
 		{
 			if (i == activeDimension)
 				continue;
 
 			static_cast<ColliderTilemap*>(dimensions[i].tilemap->GetComponent("Collider"))->SetActive(false);
-			static_cast<Sprite*>(dimensions[i].tilemap->GetComponent("Sprite"))->SetAlpha(0.5f);
+			static_cast<Sprite*>(dimensions[i].tilemap->GetComponent("Sprite"))->SetAlpha(0.3f);
 			for (GameObject* spike : dimensions[i].spikes)
 			{
 				UNREFERENCED_PARAMETER(spike);
 				static_cast<Hazard*>(spike->GetComponent("Hazard"))->SetCollidable(false);
-				static_cast<Sprite*>(spike->GetComponent("Sprite"))->SetAlpha(0.5f);
+				static_cast<Sprite*>(spike->GetComponent("Sprite"))->SetAlpha(0.3f);
 			}
 		}
 
+		// Make the active dimension opaque and collidable.
 		static_cast<ColliderTilemap*>(dimensions[activeDimension].tilemap->GetComponent("Collider"))->SetActive(true);
 		static_cast<Sprite*>(dimensions[activeDimension].tilemap->GetComponent("Sprite"))->SetAlpha(1.0f);
 		for (GameObject* spike : dimensions[activeDimension].spikes)
