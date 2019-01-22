@@ -1,4 +1,4 @@
-String mapName = "Separation";
+String mapName = "MediumBoy";
 
 color staticColor = color(0, 0, 0, 255);
 color staticSpikeColor = color(255, 0, 246, 255);
@@ -7,6 +7,7 @@ color redSpikeColor = color(255, 136, 0, 255);
 color blueColor = color(0, 12, 255, 255);
 color blueSpikeColor = color(0, 225, 255, 255);
 color chipColor = color(255, 233, 0, 255);
+color powerupColor = color(0, 255, 0, 255);
 
 void setup()
 {
@@ -19,6 +20,7 @@ void setup()
   FloatList redSpikes = new FloatList();
   FloatList blueSpikes = new FloatList();
   FloatList chips = new FloatList();
+  FloatList powerups = new FloatList();
   for (int y = 0; y < image.height; y++)
   {
     for (int x = 0; x < image.width; x++)
@@ -60,6 +62,11 @@ void setup()
       {
         chips.push(x);
         chips.push(y);
+      }
+      else if (c == powerupColor)
+      {
+        powerups.push(x);
+        powerups.push(y);
       }
       
       staticData += staticValue + " ";
@@ -147,6 +154,25 @@ void setup()
     cpp += "\tGameObject* chips = new GameObject(*objectManager.GetArchetypeByName(\"Collectible\"));\r\n";
     cpp += "\tstatic_cast<Transform*>(chips->GetComponent(\"Transform\"))->SetTranslation(Vector2D(chipsSpawns[i] * 100.0f, chipsSpawns[i + 1] * -100.0f));\r\n";
     cpp += "\tobjectManager.AddObject(*chips);\r\n";
+    cpp += "}\r\n\r\n";
+  }
+  
+  if (powerups.size() > 0)
+  {
+    cpp += "float powerups[" + powerups.size() + "] = {";
+    for (int i = 0; i < powerups.size(); i++)
+    {
+      if (i % 32 == 0)
+        cpp += "\r\n\t";
+      cpp += powerups.get(i) + "f";
+      if (i != powerups.size() - 1)
+        cpp += ", ";
+    }
+    cpp += "\r\n};\r\n\r\n";
+    cpp += "for (int i = 0; i < " + powerups.size() + "; i += 2)\r\n{\r\n";
+    cpp += "\tGameObject* powerup = new GameObject(*objectManager.GetArchetypeByName(\"Powerup\"));\r\n";
+    cpp += "\tstatic_cast<Transform*>(powerup->GetComponent(\"Transform\"))->SetTranslation(Vector2D(powerups[i] * 100.0f, powerups[i + 1] * -100.0f));\r\n";
+    cpp += "\tobjectManager.AddObject(*powerup);\r\n";
     cpp += "}\r\n\r\n";
   }
   

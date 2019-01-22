@@ -45,7 +45,7 @@ namespace Behaviors
 
 	// Constructor
 	DimensionController::DimensionController() : Component("DimensionController"),
-		dimensions(std::vector<Dimension>()), cooldown(1.0f), currentCooldown(0.0f)
+		dimensions(std::vector<Dimension>()), cooldown(0.5f), currentCooldown(0.0f)
 	{
 	}
 

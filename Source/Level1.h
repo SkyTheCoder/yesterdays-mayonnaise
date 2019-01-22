@@ -40,16 +40,29 @@ namespace Levels
 	{
 	public:
 		//------------------------------------------------------------------------------
+		// Public Structures:
+		//------------------------------------------------------------------------------
+
+		enum class Map : int
+		{
+			Arena3 = 0,
+			MediumBoy,
+			Channels,
+			Separation,
+			MAX_MAP
+		};
+
+		//------------------------------------------------------------------------------
 		// Public Functions:
 		//------------------------------------------------------------------------------
 
-		// Creates an instance of Level 2.
-		Level1();
+		// Creates an instance of Level 1.
+		Level1(Map map);
 
-		// Load the resources associated with Level 2.
+		// Load the resources associated with Level 1.
 		void Load() override;
 
-		// Initialize the memory associated with Level 2.
+		// Initialize the memory associated with Level 1.
 		void Initialize() override;
 
 		// Update Level 2.
@@ -57,14 +70,51 @@ namespace Levels
 		//	 dt = Change in time (in seconds) since the last game loop.
 		void Update(float dt) override;
 
-		// Unload the resources associated with Level 2.
+		// Unload the resources associated with Level 1.
 		void Unload() override;
 
 	private:
+		//------------------------------------------------------------------------------
+		// Private Functions:
+		//------------------------------------------------------------------------------
+
+		// Adds static spikes to the level.
+		// Params:
+		//   spikes = An array of floats, each pair being a coordinate.
+		//   numSpikes = How many spikes are in the array.
+		void AddStaticSpikes(const float* spikes, int numSpikes);
+
+		// Adds red spikes to the level.
+		// Params:
+		//   spikes = An array of floats, each pair being a coordinate.
+		//   numSpikes = How many spikes are in the array.
+		//   redDimension = The ID of the red dimension.
+		void AddRedSpikes(const float* spikes, int numSpikes, unsigned redDimension);
+
+		// Adds blue spikes to the level.
+		// Params:
+		//   spikes = An array of floats, each pair being a coordinate.
+		//   numSpikes = How many spikes are in the array.
+		//   blueDimension = The ID of the blue dimension.
+		void AddBlueSpikes(const float* spikes, int numSpikes, unsigned blueDimension);
+
+		// Adds chips to the level.
+		// Params:
+		//   chipsSpawns = An array of floats, each pair being a coordinate.
+		//   numChis = How many chips are in the array.
+		void AddChips(const float* chipsSpawns, int numChips);
+
+		// Adds powerups to the level.
+		// Params:
+		//   powerups = An array of floats, each pair being a coordinate.
+		//   numPowerups = How many powerups are in the array.
+		void AddPowerups(const float* powerups, int numPowerups);
 
 		//------------------------------------------------------------------------------
 		// Private Variables:
 		//------------------------------------------------------------------------------
+
+		Map map;
 
 		Mesh* meshGenericQuad;
 

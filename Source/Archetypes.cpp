@@ -214,6 +214,7 @@ namespace Archetypes
 		// Create transform
 		Transform* transform = new Transform();
 		transform->SetScale(Vector2D(100.0f, 100.0f));
+		transform->SetRotation(M_PI_F / 4.0f);
 
 		// Create sprite
 		Sprite* sprite = new Sprite();
