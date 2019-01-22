@@ -46,7 +46,7 @@ namespace Archetypes
 	// Returns:
 	//	 A pointer to the newly constructed game object
 	GameObject* CreatePlayer(Mesh* mesh, SpriteSource* spriteSource);
-	
+
 	// Create a tilemap object
 	// Params:
 	//   mesh = The mesh to use for the sprite.
@@ -76,15 +76,13 @@ namespace Archetypes
 
 	// Create a hazard archetype
 	// Params:
-	//   name = The name of the hazard.
 	//   mesh = The mesh to use for the sprite.
 	//   spriteSource = The sprite source to use for the sprite.
-	//   frame = The frame in the hazards spritesheet to use.
 	// Returns:
 	//   A pointer to the newly constructed game archetype.
 	GameObject* CreateHazardArchetype(std::string name, Mesh* mesh, SpriteSource* spriteSource, unsigned frame);
-	
-	// Create a jump boost archetype
+
+	// Create a hazard archetype
 	// Params:
 	//   mesh = The mesh to use for the sprite.
 	//   spriteSource = The sprite source to use for the sprite.
@@ -92,13 +90,21 @@ namespace Archetypes
 	//   A pointer to the newly constructed game archetype.
 	GameObject* CreateJumpBoostArchetype(Mesh* mesh, SpriteSource* spriteSource);
 
-	// Create a speed boost archetype
+	// Create a speedBoost archetype
 	// Params:
 	//   mesh = The mesh to use for the sprite.
 	//   spriteSource = The sprite source to use for the sprite.
 	// Returns:
 	//   A pointer to the newly constructed game archetype.
 	GameObject* CreateSpeedBoostArchetype(Mesh* mesh, SpriteSource* spriteSource);
+
+	// Create a button archetype
+	// Params:
+	//   mesh = The mesh to use for the sprite.
+	//   spriteSource = The sprite source to use for the sprite.
+	// Returns:
+	//   A pointer to the newly constructed game archetype.
+	GameObject* CreateButtonArchetype(Mesh* mesh, SpriteSource* spriteSource);
 }
 
 //----------------------------------------------------------------------------
