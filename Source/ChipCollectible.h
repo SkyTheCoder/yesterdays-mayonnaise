@@ -41,7 +41,7 @@ namespace Behaviors
 		//   cooldown = The cooldown after collected
 		ChipCollectible(float cooldown = 30.0f);
 		
-		// Clones the componnet
+		// Clones the component
 		Component* Clone() const override;
 		// Initializes the component
 		void Initialize() override;

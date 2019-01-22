@@ -105,13 +105,16 @@ xcopy fmod\lib\fmodstudio64.dll "$(OutDir)" /Y</Command>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Source\Archetypes.cpp" />
+    <ClCompile Include="Source\Button.cpp" />
     <ClCompile Include="Source\CameraFollow.cpp" />
     <ClCompile Include="Source\ChipCollectible.cpp" />
     <ClCompile Include="Source\ColorChange.cpp" />
     <ClCompile Include="Source\DimensionController.cpp" />
     <ClCompile Include="Source\Hazard.cpp" />
     <ClCompile Include="Source\Level1.cpp" />
+    <ClCompile Include="Source\LevelSelect.cpp" />
     <ClCompile Include="Source\Main.cpp" />
+    <ClCompile Include="Source\MainMenu.cpp" />
     <ClCompile Include="Source\MonkeyAnimation.cpp" />
     <ClCompile Include="Source\PlayerMovement.cpp" />
     <ClCompile Include="Source\PlayerShip.cpp" />
@@ -122,16 +125,18 @@ xcopy fmod\lib\fmodstudio64.dll "$(OutDir)" /Y</Command>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Source\TimedDeath.cpp" />
-    <ClCompile Include="Source\WinLevel.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Archetypes.h" />
+    <ClInclude Include="Source\Button.h" />
     <ClInclude Include="Source\CameraFollow.h" />
     <ClInclude Include="Source\ChipCollectible.h" />
     <ClInclude Include="Source\ColorChange.h" />
     <ClInclude Include="Source\DimensionController.h" />
     <ClInclude Include="Source\Hazard.h" />
     <ClInclude Include="Source\Level1.h" />
+    <ClInclude Include="Source\LevelSelect.h" />
+    <ClInclude Include="Source\MainMenu.h" />
     <ClInclude Include="Source\MonkeyAnimation.h" />
     <ClInclude Include="Source\PlayerMovement.h" />
     <ClInclude Include="Source\PlayerShip.h" />
@@ -139,7 +144,6 @@ xcopy fmod\lib\fmodstudio64.dll "$(OutDir)" /Y</Command>
     <ClInclude Include="Source\SpriteText.h" />
     <ClInclude Include="Source\stdafx.h" />
     <ClInclude Include="Source\TimedDeath.h" />
-    <ClInclude Include="Source\WinLevel.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

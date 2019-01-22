@@ -44,6 +44,7 @@
 #include "Hazard.h"
 #include "DimensionController.h"
 #include "ChipCollectible.h"
+#include "Button.h"
 
 //------------------------------------------------------------------------------
 
@@ -201,10 +202,10 @@ namespace Archetypes
 
 	// Create a hazard archetype
 	// Params:
-	//   name = The name of the hazard.
+	//	 name = name of hazard
 	//   mesh = The mesh to use for the sprite.
 	//   spriteSource = The sprite source to use for the sprite.
-	//   frame = The frame in the hazards spritesheet to use.
+	//	 frame = frame to start on
 	// Returns:
 	//   A pointer to the newly constructed game archetype.
 	GameObject* CreateHazardArchetype(std::string name, Mesh* mesh, SpriteSource* spriteSource, unsigned frame)
@@ -237,7 +238,7 @@ namespace Archetypes
 		return Hazard;
 	}
 
-	// Create a jump boost archetype
+	// Create a jumpBoost archetype
 	// Params:
 	//   mesh = The mesh to use for the sprite.
 	//   spriteSource = The sprite source to use for the sprite.
@@ -267,7 +268,7 @@ namespace Archetypes
 		return JumpBoost;
 	}
 
-	// Create a speed boost archetype
+	// Create a speedBoost archetype
 	// Params:
 	//   mesh = The mesh to use for the sprite.
 	//   spriteSource = The sprite source to use for the sprite.
@@ -295,6 +296,40 @@ namespace Archetypes
 		SpeedBoost->AddComponent(collider);
 
 		return SpeedBoost;
+	}
+
+	// Create a button archetype
+	// Params:
+	//   mesh = The mesh to use for the sprite.
+	//   spriteSource = The sprite source to use for the sprite.
+	// Returns:
+	//   A pointer to the newly constructed game archetype.
+	GameObject* CreateButtonArchetype(Mesh* mesh, SpriteSource* spriteSource)
+	{
+		GameObject* Button = new GameObject("Button");
+
+		// Create transform
+		Transform* transform = new Transform();
+		transform->SetScale(Vector2D(100.0f, 50.0f));
+
+		// Create sprite
+		Sprite* sprite = new Sprite();
+		sprite->SetMesh(mesh);
+		sprite->SetSpriteSource(spriteSource);
+
+		// Create collider
+		ColliderRectangle* collider = new ColliderRectangle(transform->GetScale() / 2.0f);
+
+		// Create button
+		Behaviors::Button* button = new Behaviors::Button();
+
+		// Add components
+		Button->AddComponent(transform);
+		Button->AddComponent(sprite);
+		Button->AddComponent(collider);
+		Button->AddComponent(button);
+
+		return Button;
 	}
 }
 
