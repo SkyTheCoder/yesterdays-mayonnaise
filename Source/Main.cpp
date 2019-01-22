@@ -48,7 +48,7 @@ int WINAPI WinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prevInstance, _In
 	Space* space = new Space("GameSpace");
 
 	// Set initial level to the second level.
-	space->SetLevel(new Levels::Level1());
+	space->SetLevel(new Levels::Level1(Levels::Level1::Map::Arena3));
 
 	// Add additional modules to engine
 	Engine::GetInstance().AddModule(space);

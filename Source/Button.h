@@ -16,6 +16,8 @@
 //------------------------------------------------------------------------------
 
 #include "Component.h" // base class
+#include <Shapes2D.h> // BoundingRectangle
+#include "Level1.h" // Levels::Level1::Map
 
 //------------------------------------------------------------------------------
 
@@ -23,7 +25,6 @@
 // Forward Declarations:
 //------------------------------------------------------------------------------
 
-typedef struct BoundingRectangle BoundingRectangle;
 typedef class Sprite Sprite;
 
 //------------------------------------------------------------------------------
@@ -56,10 +57,10 @@ namespace Behaviors
 		void Update(float dt) override;
 
 		// Returns the level the button loads
-		int GetLevel();
+		Levels::Level1::Map GetLevel();
 
 		// Sets the level the button loads
-		void SetLevel(int level);
+		void SetLevel(Levels::Level1::Map map);
 
 	private:
 
@@ -70,7 +71,7 @@ namespace Behaviors
 		// Components
 		Sprite* sprite;
 		BoundingRectangle boundingRact;
-		int level;
+		Levels::Level1::Map map;
 	};
 }
 

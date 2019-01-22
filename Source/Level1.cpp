@@ -416,13 +416,13 @@ namespace Levels
 	//   spikes = An array of floats, each pair being a coordinate.
 	//   numSpikes = How many spikes are in the array.
 	//   redDimension = The ID of the red dimension.
-	void Level1::AddRedSpikes(const float* spikes, int numSpik, unsigned redDimension)
+	void Level1::AddRedSpikes(const float* spikes, int numSpikes, unsigned redDimension)
 	{
 		GameObjectManager& objectManager = GetSpace()->GetObjectManager();
 		GameObject* gameController = new GameObject(*objectManager.GetArchetypeByName("GameController"));
 		Behaviors::DimensionController& dimensionController = *static_cast<Behaviors::DimensionController*>(gameController->GetComponent("DimensionController"));
 
-		for (int i = 0; i < 66; i += 2)
+		for (int i = 0; i < numSpikes * 2; i += 2)
 		{
 			GameObject* spike = new GameObject(*objectManager.GetArchetypeByName("RedSpike"));
 			static_cast<Transform*>(spike->GetComponent("Transform"))->SetTranslation(Vector2D(spikes[i] * 100.0f, spikes[i + 1] * -100.0f));
@@ -458,8 +458,6 @@ namespace Levels
 	void Level1::AddChips(const float* chipsSpawns, int numChips)
 	{
 		GameObjectManager& objectManager = GetSpace()->GetObjectManager();
-		GameObject* gameController = new GameObject(*objectManager.GetArchetypeByName("GameController"));
-		Behaviors::DimensionController& dimensionController = *static_cast<Behaviors::DimensionController*>(gameController->GetComponent("DimensionController"));
 
 		for (int i = 0; i < numChips * 2; i += 2)
 		{
@@ -476,8 +474,6 @@ namespace Levels
 	void Level1::AddPowerups(const float* powerups, int numPowerups)
 	{
 		GameObjectManager& objectManager = GetSpace()->GetObjectManager();
-		GameObject* gameController = new GameObject(*objectManager.GetArchetypeByName("GameController"));
-		Behaviors::DimensionController& dimensionController = *static_cast<Behaviors::DimensionController*>(gameController->GetComponent("DimensionController"));
 
 		for (int i = 0; i < numPowerups * 2; i += 2)
 		{

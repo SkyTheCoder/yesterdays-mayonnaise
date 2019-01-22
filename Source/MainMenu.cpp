@@ -61,7 +61,7 @@ namespace Levels
 
 		if (input.CheckTriggered(' '))
 		{
-			GetSpace()->SetLevel(new Level1());
+			GetSpace()->SetLevel(new Level1(Levels::Level1::Map::Arena3));
 		}
 	}
 

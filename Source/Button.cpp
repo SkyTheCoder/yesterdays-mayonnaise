@@ -26,7 +26,6 @@
 #include <Vector2D.h>
 #include <Graphics.h>
 #include <Space.h>
-#include "Level1.h"
 
 //------------------------------------------------------------------------------
 // Public Structures:
@@ -39,7 +38,7 @@ namespace Behaviors
 	//------------------------------------------------------------------------------
 
 	// Default constructor
-	Button::Button() : Component("Button"), level(0)
+	Button::Button() : Component("Button"), map(Levels::Level1::Map::Arena3), boundingRact(Vector2D(), Vector2D(50.0f, 25.0f))
 	{
 	}
 
@@ -64,27 +63,29 @@ namespace Behaviors
 	//   dt = The (fixed) change in time since the last step.
 	void Button::Update(float dt)
 	{
+		UNREFERENCED_PARAMETER(dt);
+
 		Input& input = Input::GetInstance();
 		Vector2D mousePos =	Graphics::GetInstance().ScreenToWorldPosition(input.GetCursorPosition());
 
-		if (PointRectangleIntersection(mousePos, *boundingRact))
+		if (PointRectangleIntersection(mousePos, boundingRact))
 		{
 			sprite->SetColor(Colors::Green);
 			if (input.CheckTriggered(VK_LBUTTON))
-				GetOwner()->GetSpace()->SetLevel(new Levels::Level1(level));
+				GetOwner()->GetSpace()->SetLevel(new Levels::Level1(map));
 		}
 	}
 
 	// Returns the level the button loads
-	int Button::GetLevel()
+	Levels::Level1::Map Button::GetLevel()
 	{
-		return level;
+		return map;
 	}
 
 	// Sets the level the button loads
-	void Button::SetLevel(int level_)
+	void Button::SetLevel(Levels::Level1::Map map_)
 	{
-		level = level_;
+		map = map_;
 	}
 }
 
