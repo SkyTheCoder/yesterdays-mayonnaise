@@ -52,14 +52,20 @@
     <ClCompile Include="Source\ChipCollectible.cpp">
       <Filter>Game\Behaviors</Filter>
     </ClCompile>
-    <ClCompile Include="Source\WinLevel.cpp">
-      <Filter>Game\Levels</Filter>
-    </ClCompile>
     <ClCompile Include="Source\DimensionController.cpp">
       <Filter>Game\Behaviors</Filter>
     </ClCompile>
     <ClCompile Include="Source\Hazard.cpp">
       <Filter>Game\Behaviors</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\LevelSelect.cpp">
+      <Filter>Game\Levels</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Button.cpp">
+      <Filter>Game\Behaviors</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\MainMenu.cpp">
+      <Filter>Game\Levels</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -99,14 +105,20 @@
     <ClInclude Include="Source\ChipCollectible.h">
       <Filter>Game\Behaviors</Filter>
     </ClInclude>
-    <ClInclude Include="Source\WinLevel.h">
-      <Filter>Game\Levels</Filter>
-    </ClInclude>
     <ClInclude Include="Source\DimensionController.h">
       <Filter>Game\Behaviors</Filter>
     </ClInclude>
     <ClInclude Include="Source\Hazard.h">
       <Filter>Game\Behaviors</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\LevelSelect.h">
+      <Filter>Game\Levels</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Button.h">
+      <Filter>Game\Behaviors</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\MainMenu.h">
+      <Filter>Game\Levels</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
