@@ -49,9 +49,11 @@ namespace Behaviors
 		//	 walkStart  = The starting frame for the walk animation.
 		//   walkLength = The number of frames of the walk animation.
 		//   jumpStart  = The starting frame for the jump animation.
+		//   jumpLength = The number of frames of the jump animation.
 		//   idleStart  = The starting frame for the idle animation.
+		//   idleLength = The number of frames of the idle animation.
 		MonkeyAnimation(unsigned walkStart, unsigned walkLength, 
-			unsigned jumpStart, unsigned idleStart);
+			unsigned jumpStart, unsigned jumpLength, unsigned idleStart, unsigned idleLength);
 
 		// Clone a component and return a pointer to the cloned component.
 		// Returns:
@@ -65,6 +67,17 @@ namespace Behaviors
 		// Params:
 		//   dt = The (fixed) change in time since the last step.
 		void Update(float dt) override;
+
+		// Sets the frames for the animation.
+		// Params:
+		//	 walkStart  = The starting frame for the walk animation.
+		//   walkLength = The number of frames of the walk animation.
+		//   jumpStart  = The starting frame for the jump animation.
+		//   jumpLength = The number of frames of the jump animation.
+		//   idleStart  = The starting frame for the idle animation.
+		//   idleLength = The number of frames of the idle animation.
+		void SetFrames(unsigned walkStart, unsigned walkLength,
+			unsigned jumpStart, unsigned jumpLength, unsigned idleStart, unsigned idleLength);
 
 	private:
 		//------------------------------------------------------------------------------
@@ -99,7 +112,9 @@ namespace Behaviors
 		unsigned walkStart;
 		unsigned walkLength;
 		unsigned jumpStart;
+		unsigned jumpLength;
 		unsigned idleStart;
+		unsigned idleLength;
 
 		// Animation state
 		State currentState;

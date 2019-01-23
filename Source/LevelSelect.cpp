@@ -77,49 +77,12 @@ namespace Levels
 		static_cast<SpriteText*>(text->GetComponent("SpriteText"))->SetText("Select Your Level");
 		static_cast<Transform*>(text->GetComponent("Transform"))->SetTranslation(Vector2D(0.0f, 250.0f));
 		objectManager.AddObject(*text);
-		
-		GameObject* levelButton = new GameObject(*objectManager.GetArchetypeByName("Button"));
-		static_cast<Transform*>(levelButton->GetComponent("Transform"))->SetTranslation(Vector2D(-175.0f, 150.0f));
-		objectManager.AddObject(*levelButton);
 
-		text = new GameObject(*objectManager.GetArchetypeByName("Text"));
-		static_cast<SpriteText*>(text->GetComponent("SpriteText"))->SetText("Arena 3");
-		static_cast<SpriteText*>(text->GetComponent("SpriteText"))->SetColor(Color(0.0f, 0.0f, 0.0f));
-		static_cast<Transform*>(text->GetComponent("Transform"))->SetTranslation(Vector2D(-175.0f, 150.0f));
-		objectManager.AddObject(*text);
-
-		levelButton = new GameObject(*objectManager.GetArchetypeByName("Button"));
-		static_cast<Transform*>(levelButton->GetComponent("Transform"))->SetTranslation(Vector2D(175.0f, 150.0f));
-		static_cast<Behaviors::Button*>(levelButton->GetComponent("Button"))->SetMap(Levels::Map::MediumBoy);
-		objectManager.AddObject(*levelButton);
-
-		text = new GameObject(*objectManager.GetArchetypeByName("Text"));
-		static_cast<SpriteText*>(text->GetComponent("SpriteText"))->SetText("MediumBoy");
-		static_cast<SpriteText*>(text->GetComponent("SpriteText"))->SetColor(Color(0.0f, 0.0f, 0.0f));
-		static_cast<Transform*>(text->GetComponent("Transform"))->SetTranslation(Vector2D(175.0f, 150.0f));
-		objectManager.AddObject(*text);
-
-		levelButton = new GameObject(*objectManager.GetArchetypeByName("Button"));
-		static_cast<Transform*>(levelButton->GetComponent("Transform"))->SetTranslation(Vector2D(-175.0f, 50.0f));
-		static_cast<Behaviors::Button*>(levelButton->GetComponent("Button"))->SetMap(Levels::Map::Channels);
-		objectManager.AddObject(*levelButton);
-
-		text = new GameObject(*objectManager.GetArchetypeByName("Text"));
-		static_cast<SpriteText*>(text->GetComponent("SpriteText"))->SetText("Channels");
-		static_cast<SpriteText*>(text->GetComponent("SpriteText"))->SetColor(Color(0.0f, 0.0f, 0.0f));
-		static_cast<Transform*>(text->GetComponent("Transform"))->SetTranslation(Vector2D(-175.0f, 50.0f));
-		objectManager.AddObject(*text);
-
-		levelButton = new GameObject(*objectManager.GetArchetypeByName("Button"));
-		static_cast<Transform*>(levelButton->GetComponent("Transform"))->SetTranslation(Vector2D(175.0f, 50.0f));
-		static_cast<Behaviors::Button*>(levelButton->GetComponent("Button"))->SetMap(Levels::Map::Separation);
-		objectManager.AddObject(*levelButton);
-
-		text = new GameObject(*objectManager.GetArchetypeByName("Text"));
-		static_cast<SpriteText*>(text->GetComponent("SpriteText"))->SetText("Separation");
-		static_cast<SpriteText*>(text->GetComponent("SpriteText"))->SetColor(Color(0.0f, 0.0f, 0.0f));
-		static_cast<Transform*>(text->GetComponent("Transform"))->SetTranslation(Vector2D(175.0f, 50.0f));
-		objectManager.AddObject(*text);
+		AddMapButton("Tutorial", Vector2D(-175.0f, 150.0f), Levels::Map::Tutorial);
+		AddMapButton("Arena 3", Vector2D(175.0f, 150.0f), Levels::Map::Arena3);
+		AddMapButton("MediumBoy", Vector2D(-175.0f, 50.0f), Levels::Map::MediumBoy);
+		AddMapButton("Channels", Vector2D(175.0f, 50.0f), Levels::Map::Channels);
+		AddMapButton("Separation", Vector2D(-175.0f, -50.0f), Levels::Map::Separation);
 
 		Camera& camera = Graphics::GetInstance().GetCurrentCamera();
 		camera.SetTranslation(Vector2D());
@@ -142,6 +105,30 @@ namespace Levels
 		delete spriteSourceButton;
 		delete textureButton;
 		delete meshButton;
+	}
+
+	//------------------------------------------------------------------------------
+	// Private Functions:
+	//------------------------------------------------------------------------------
+
+	// Adds a new map button.
+	// name = The name of the level.
+	// position = The position of the button.
+	// map = The map the button should switch to.
+	void LevelSelect::AddMapButton(const char* name_, Vector2D position, Levels::Map map)
+	{
+		GameObjectManager& objectManager = GetSpace()->GetObjectManager();
+
+		GameObject* levelButton = new GameObject(*objectManager.GetArchetypeByName("Button"));
+		static_cast<Transform*>(levelButton->GetComponent("Transform"))->SetTranslation(position);
+		static_cast<Behaviors::Button*>(levelButton->GetComponent("Button"))->SetMap(map);
+		objectManager.AddObject(*levelButton);
+
+		GameObject*text = new GameObject(*objectManager.GetArchetypeByName("Text"));
+		static_cast<SpriteText*>(text->GetComponent("SpriteText"))->SetText(name_);
+		static_cast<SpriteText*>(text->GetComponent("SpriteText"))->SetColor(Color(0.0f, 0.0f, 0.0f));
+		static_cast<Transform*>(text->GetComponent("Transform"))->SetTranslation(position);
+		objectManager.AddObject(*text);
 	}
 }
 //----------------------------------------------------------------------------

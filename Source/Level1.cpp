@@ -40,6 +40,7 @@
 #include "CameraFollow.h"
 #include "PlayerMovement.h"
 #include "DimensionController.h"
+#include "MonkeyAnimation.h"
 
 // Levels
 #include "LevelSelect.h"
@@ -60,7 +61,9 @@ namespace Levels
 	Level1::Level1(Map map_) : Level("Level1"),
 		map(map_),
 		meshMonkey(nullptr), textureMonkey(nullptr), spriteSourceMonkey(nullptr),
-		columnsMonkey(3), rowsMonkey(5),
+		columnsMonkey(3), rowsMonkey(6),
+		meshCat(nullptr), textureCat(nullptr), spriteSourceCat(nullptr),
+		columnsCat(4), rowsCat(3),
 		meshGenericQuad(nullptr),
 		textureCollectible(nullptr), spriteSourceCollectible(nullptr),
 		meshSpikes(nullptr), textureSpikes(nullptr), spriteSourceSpikes(nullptr), columnsSpikes(1), rowsSpikes(3),
@@ -84,6 +87,15 @@ namespace Levels
 		// Setup the player sprite source.
 		spriteSourceMonkey = new SpriteSource(columnsMonkey, rowsMonkey, textureMonkey);
 
+		// Create a new quad mesh for the sprite.
+		meshCat = CreateQuadMesh(Vector2D(1.0f / columnsCat, 1.0f / rowsCat), Vector2D(0.5f, 0.5f));
+
+		// Load the player texture.
+		textureCat = Texture::CreateTextureFromFile("Cat.png");
+
+		// Setup the player sprite source.
+		spriteSourceCat = new SpriteSource(columnsCat, rowsCat, textureCat);
+
 		meshGenericQuad = CreateQuadMesh(Vector2D(1.0f, 1.0f), Vector2D(0.5f, 0.5f));
 
 		// Load collectible assets
@@ -99,6 +111,9 @@ namespace Levels
 		std::string mapName;
 		switch (map)
 		{
+		case Map::Tutorial:
+			mapName = "Tutorial";
+			break;
 		case Map::Arena3:
 			mapName = "Arena3";
 			break;
@@ -162,6 +177,10 @@ namespace Levels
 		objectManager.AddObject(*player);
 
 		GameObject* player2 = new GameObject(*objectManager.GetArchetypeByName("Player"));
+		Sprite* player2Sprite = static_cast<Sprite*>(player2->GetComponent("Sprite"));
+		player2Sprite->SetMesh(meshCat);
+		player2Sprite->SetSpriteSource(spriteSourceCat);
+		static_cast<Behaviors::MonkeyAnimation*>(player2->GetComponent("MonkeyAnimation"))->SetFrames(0, 4, 8, 4, 4, 4);
 		Behaviors::PlayerMovement* player2Movement = static_cast<Behaviors::PlayerMovement*>(player2->GetComponent("PlayerMovement"));
 		player2Movement->SetKeybinds('W', 'A', 'D', VK_LCONTROL);
 		player2Movement->SetPlayerID(2);
@@ -194,6 +213,38 @@ namespace Levels
 
 			switch (map)
 			{
+			case Map::Tutorial:
+			{
+				float staticSpikes[84] = {
+					1.0f, 12.0f, 1.0f, 13.0f, 1.0f, 14.0f, 1.0f, 15.0f, 1.0f, 16.0f, 1.0f, 17.0f, 20.0f, 17.0f, 1.0f, 18.0f, 20.0f, 18.0f, 1.0f, 19.0f, 20.0f, 19.0f, 1.0f, 20.0f, 1.0f, 21.0f, 1.0f, 22.0f, 1.0f, 23.0f, 1.0f, 24.0f,
+					2.0f, 24.0f, 3.0f, 24.0f, 4.0f, 24.0f, 5.0f, 24.0f, 6.0f, 24.0f, 7.0f, 24.0f, 8.0f, 24.0f, 9.0f, 24.0f, 10.0f, 24.0f, 11.0f, 24.0f, 12.0f, 24.0f, 13.0f, 24.0f, 14.0f, 24.0f, 15.0f, 24.0f, 16.0f, 24.0f, 17.0f, 24.0f,
+					18.0f, 24.0f, 28.0f, 30.0f, 29.0f, 30.0f, 30.0f, 30.0f, 34.0f, 30.0f, 35.0f, 30.0f, 36.0f, 30.0f, 40.0f, 30.0f, 41.0f, 30.0f, 42.0f, 30.0f
+				};
+
+				float redSpikes[8] = {
+					23.0f, 20.0f, 33.0f, 20.0f, 23.0f, 21.0f, 33.0f, 21.0f
+				};
+
+				float blueSpikes[8] = {
+					28.0f, 20.0f, 38.0f, 20.0f, 28.0f, 21.0f, 38.0f, 21.0f
+				};
+
+				float chipsSpawns[12] = {
+					22.0f, 16.0f, 44.0f, 19.0f, 20.0f, 21.0f, 5.0f, 28.0f, 24.0f, 28.0f, 44.0f, 28.0f
+				};
+
+				AddStaticSpikes(staticSpikes, 42);
+				AddRedSpikes(redSpikes, 4, redDimension);
+				AddBlueSpikes(blueSpikes, 4, blueDimension);
+				AddChips(chipsSpawns, 6);
+
+				static_cast<Sprite*>(player2->GetComponent("Sprite"))->SetAlpha(0.0f);
+				static_cast<Transform*>(player->GetComponent("Transform"))->SetTranslation(Vector2D(100.0f, -2800.0f));
+				static_cast<Transform*>(player2->GetComponent("Transform"))->SetTranslation(Vector2D(100.0f, -2800.0f));
+				static_cast<Behaviors::PlayerMovement*>(player2->GetComponent("PlayerMovement"))->SetKeybinds(VK_UP, VK_LEFT, VK_RIGHT, VK_RCONTROL);
+
+				break;
+			}
 			case Map::Arena3:
 			{
 				float staticSpikes[168] = {
@@ -358,7 +409,16 @@ namespace Levels
 			Behaviors::PlayerMovement* lastPlayerMovement = static_cast<Behaviors::PlayerMovement*>(lastPlayer->GetComponent("PlayerMovement"));
 
 			// Set text to winText
-			static_cast<SpriteText*>(winText->GetComponent("SpriteText"))->SetText(std::string("Player ") + std::to_string(lastPlayerMovement->GetPlayerID()) + std::string(" won! Press <SPACE> to return to level select"));
+			SpriteText* spriteText = static_cast<SpriteText*>(winText->GetComponent("SpriteText"));
+			switch (lastPlayerMovement->GetPlayerID())
+			{
+			case 1:
+				spriteText->SetText("Ninja Monkey won! Press <SPACE> to return to level select");
+				break;
+			case 2:
+				spriteText->SetText("Cat Fighter won! Press <SPACE> to return to level select");
+				break;
+			}
 
 			// Text follows camera
 			static_cast<Transform*>(winText->GetComponent("Transform"))
@@ -373,6 +433,14 @@ namespace Levels
 		else if (playerCount <= 0)
 		{
 			GetSpace()->SetLevel(new Levels::LevelSelect());
+		}
+		else if (map == Map::Tutorial)
+		{
+			// Restart on <SPACE>
+			if (input.CheckTriggered(' '))
+			{
+				GetSpace()->RestartLevel();
+			}
 		}
 	}
 
@@ -395,6 +463,9 @@ namespace Levels
 		delete meshSpikes;
 		delete spriteSourceCollectible;
 		delete textureCollectible;
+		delete spriteSourceCat;
+		delete textureCat;
+		delete meshCat;
 		delete spriteSourceMonkey;
 		delete textureMonkey;
 		delete meshMonkey;

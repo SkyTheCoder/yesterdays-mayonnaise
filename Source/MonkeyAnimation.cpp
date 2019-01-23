@@ -43,9 +43,11 @@ namespace Behaviors
 	//	 walkStart  = The starting frame for the walk animation.
 	//   walkLength = The number of frames of the walk animation.
 	//   jumpStart  = The starting frame for the jump animation.
+	//   jumpLength = The number of frames of the jump animation.
 	//   idleStart  = The starting frame for the idle animation.
+	//   idleLength = The number of frames of the idle animation.
 	MonkeyAnimation::MonkeyAnimation(unsigned walkStart, unsigned walkLength,
-		unsigned jumpStart, unsigned idleStart) : Component("MonkeyAnimation"), walkStart(walkStart), walkLength(walkLength), jumpStart(jumpStart), idleStart(idleStart), currentState(StateIdle), nextState(StateIdle)
+		unsigned jumpStart, unsigned jumpLength, unsigned idleStart, unsigned idleLength) : Component("MonkeyAnimation"), walkStart(walkStart), walkLength(walkLength), jumpStart(jumpStart), jumpLength(jumpLength), idleStart(idleStart), idleLength(idleLength), currentState(StateIdle), nextState(StateIdle)
 	{
 	}
 
@@ -90,6 +92,25 @@ namespace Behaviors
 		FlipSprite();
 	}
 
+	// Sets the frames for the animation.
+	// Params:
+	//	 walkStart  = The starting frame for the walk animation.
+	//   walkLength = The number of frames of the walk animation.
+	//   jumpStart  = The starting frame for the jump animation.
+	//   jumpLength = The number of frames of the jump animation.
+	//   idleStart  = The starting frame for the idle animation.
+	void MonkeyAnimation::SetFrames(unsigned walkStart_, unsigned walkLength_,
+		unsigned jumpStart_, unsigned jumpLength_, unsigned idleStart_, unsigned idleLength_)
+	{
+
+		walkStart = walkStart_;
+		walkLength = walkLength_;
+		jumpStart = jumpStart_;
+		jumpLength = jumpLength_;
+		idleStart = idleStart_;
+		idleLength = idleLength_;
+	}
+
 	//------------------------------------------------------------------------------
 	// Private Functions:
 	//------------------------------------------------------------------------------
@@ -126,15 +147,15 @@ namespace Behaviors
 			{
 			// If the state is changed to the idle state, begin playing the idle animation.
 			case State::StateIdle:
-				animation->Play(idleStart, 1, 0.0f, true);
+				animation->Play(idleStart, idleLength, 0.2f, true);
 				break;
 			// If the state is changed to the walking state, begin playing the walking animation.
 			case State::StateWalk:
-				animation->Play(walkStart, walkLength, 0.2f, true);
+				animation->Play(walkStart, walkLength, 0.1f, true);
 				break;
 			// If the state is changed to the jumping state, begin playing the jumping animation.
 			case State::StateJump:
-				animation->Play(jumpStart, 1, 0.0f, true);
+				animation->Play(jumpStart, jumpLength, 0.2f, true);
 				break;
 			}
 		}

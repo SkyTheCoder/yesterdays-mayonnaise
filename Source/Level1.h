@@ -38,7 +38,8 @@ namespace Levels
 {
 	enum class Map : int
 	{
-		Arena3 = 0,
+		Tutorial = 0,
+		Arena3,
 		MediumBoy,
 		Channels,
 		Separation,
@@ -125,6 +126,14 @@ namespace Levels
 
 		unsigned columnsMonkey;
 		unsigned rowsMonkey;
+
+		// Cat
+		Mesh* meshCat;
+		Texture* textureCat;
+		SpriteSource* spriteSourceCat;
+
+		unsigned columnsCat;
+		unsigned rowsCat;
 
 		// Collectible
 		Texture* textureCollectible;
