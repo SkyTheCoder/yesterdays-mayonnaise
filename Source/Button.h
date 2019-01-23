@@ -17,7 +17,6 @@
 
 #include "Component.h" // base class
 #include <Shapes2D.h> // BoundingRectangle
-#include "Level1.h" // Levels::Level1::Map
 
 //------------------------------------------------------------------------------
 
@@ -30,6 +29,11 @@ typedef class Sprite Sprite;
 //------------------------------------------------------------------------------
 // Public Structures:
 //------------------------------------------------------------------------------
+
+namespace Levels
+{
+	enum class Map : int;
+}
 
 namespace Behaviors
 {
@@ -56,11 +60,11 @@ namespace Behaviors
 		//   dt = The (fixed) change in time since the last step.
 		void Update(float dt) override;
 
-		// Returns the level the button loads
-		Levels::Level1::Map GetLevel();
+		// Returns the map the button loads
+		Levels::Map GetMap();
 
-		// Sets the level the button loads
-		void SetLevel(Levels::Level1::Map map);
+		// Sets the map the button loads
+		void SetMap(Levels::Map map);
 
 	private:
 
@@ -71,7 +75,7 @@ namespace Behaviors
 		// Components
 		Sprite* sprite;
 		BoundingRectangle boundingRact;
-		Levels::Level1::Map map;
+		Levels::Map map;
 	};
 }
 

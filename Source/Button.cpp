@@ -27,6 +27,8 @@
 #include <Graphics.h>
 #include <Space.h>
 
+#include "Level1.h"
+
 //------------------------------------------------------------------------------
 // Public Structures:
 //------------------------------------------------------------------------------
@@ -38,7 +40,7 @@ namespace Behaviors
 	//------------------------------------------------------------------------------
 
 	// Default constructor
-	Button::Button() : Component("Button"), map(Levels::Level1::Map::Arena3), boundingRact(Vector2D(), Vector2D(50.0f, 25.0f))
+	Button::Button() : Component("Button"), map(Levels::Map::Arena3), boundingRact(Vector2D(), Vector2D(50.0f, 25.0f))
 	{
 	}
 
@@ -70,20 +72,24 @@ namespace Behaviors
 
 		if (PointRectangleIntersection(mousePos, boundingRact))
 		{
-			sprite->SetColor(Colors::Green);
+			sprite->SetColor(Color(0.8f, 0.8f, 0.8f));
 			if (input.CheckTriggered(VK_LBUTTON))
 				GetOwner()->GetSpace()->SetLevel(new Levels::Level1(map));
 		}
+		else
+		{
+			sprite->SetColor(Colors::White);
+		}
 	}
 
-	// Returns the level the button loads
-	Levels::Level1::Map Button::GetLevel()
+	// Returns the map the button loads
+	Levels::Map Button::GetMap()
 	{
 		return map;
 	}
 
-	// Sets the level the button loads
-	void Button::SetLevel(Levels::Level1::Map map_)
+	// Sets the map the button loads
+	void Button::SetMap(Levels::Map map_)
 	{
 		map = map_;
 	}

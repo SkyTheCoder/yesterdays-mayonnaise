@@ -19,6 +19,14 @@
 #include "Level.h"
 
 //------------------------------------------------------------------------------
+// Forward References:
+//------------------------------------------------------------------------------
+
+class Texture;
+class Mesh;
+class SpriteSource;
+
+//------------------------------------------------------------------------------
 // Public Structures:
 //------------------------------------------------------------------------------
 
@@ -47,6 +55,16 @@ namespace Levels
 
 		// Unload the resources associated with LevelSelect.
 		void Unload() override;
+
+	private:
+		//------------------------------------------------------------------------------
+		// Private Variables:
+		//------------------------------------------------------------------------------
+
+		// Button
+		Mesh* meshButton;
+		Texture* textureButton;
+		SpriteSource* spriteSourceButton;
 	};
 }
 

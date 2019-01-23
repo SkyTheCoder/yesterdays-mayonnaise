@@ -310,7 +310,7 @@ namespace Archetypes
 
 		// Create transform
 		Transform* transform = new Transform();
-		transform->SetScale(Vector2D(100.0f, 50.0f));
+		transform->SetScale(Vector2D(300.0f, 75.0f));
 
 		// Create sprite
 		Sprite* sprite = new Sprite();

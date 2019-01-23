@@ -41,6 +41,9 @@
 #include "PlayerMovement.h"
 #include "DimensionController.h"
 
+// Levels
+#include "LevelSelect.h"
+
 //------------------------------------------------------------------------------
 
 //------------------------------------------------------------------------------
@@ -64,7 +67,8 @@ namespace Levels
 		dataStaticMap(nullptr), dataRedMap(nullptr), dataBlueMap(nullptr),
 		textureStaticMap(nullptr), textureRedMap(nullptr), textureBlueMap(nullptr),
 		spriteSourceStaticMap(nullptr), spriteSourceRedMap(nullptr), spriteSourceBlueMap(nullptr),
-		meshMap(nullptr), columnsMap(2), rowsMap(2)
+		meshMap(nullptr), columnsMap(2), rowsMap(2),
+		firstFrame(true)
 	{
 	}
 
@@ -96,7 +100,7 @@ namespace Levels
 		switch (map)
 		{
 		case Map::Arena3:
-			mapName = "Arena";
+			mapName = "Arena3";
 			break;
 		case Map::MediumBoy:
 			mapName = "MediumBoy";
@@ -333,10 +337,16 @@ namespace Levels
 
 		Input& input = Input::GetInstance();
 
-		//GameObject* gameController = GetSpace()->GetObjectManager().GetObjectByName("GameController");
+		GameObject* gameController = GetSpace()->GetObjectManager().GetObjectByName("GameController");
 		//Behaviors::DimensionController& dimensionController = *static_cast<Behaviors::DimensionController*>(gameController->GetComponent("DimensionController"));
 
 		GameObjectManager& objectManager = GetSpace()->GetObjectManager();
+
+		if (firstFrame)
+		{
+			static_cast<Behaviors::CameraFollow*>(gameController->GetComponent("CameraFollow"))->SnapToTarget();
+			firstFrame = false;
+		}
 
 		// End game if a player dies
 		unsigned playerCount = objectManager.GetObjectCount("Player");
@@ -348,7 +358,7 @@ namespace Levels
 			Behaviors::PlayerMovement* lastPlayerMovement = static_cast<Behaviors::PlayerMovement*>(lastPlayer->GetComponent("PlayerMovement"));
 
 			// Set text to winText
-			static_cast<SpriteText*>(winText->GetComponent("SpriteText"))->SetText(std::string("Player ") + std::to_string(lastPlayerMovement->GetPlayerID()) + std::string(" won! Press <SPACE> to restart"));
+			static_cast<SpriteText*>(winText->GetComponent("SpriteText"))->SetText(std::string("Player ") + std::to_string(lastPlayerMovement->GetPlayerID()) + std::string(" won! Press <SPACE> to return to level select"));
 
 			// Text follows camera
 			static_cast<Transform*>(winText->GetComponent("Transform"))
@@ -357,12 +367,12 @@ namespace Levels
 			// Restart on <SPACE>
 			if (input.CheckTriggered(' '))
 			{
-				GetSpace()->RestartLevel();
+				GetSpace()->SetLevel(new Levels::LevelSelect());
 			}
 		}
 		else if (playerCount <= 0)
 		{
-			GetSpace()->RestartLevel();
+			GetSpace()->SetLevel(new Levels::LevelSelect());
 		}
 	}
 
@@ -419,7 +429,7 @@ namespace Levels
 	void Level1::AddRedSpikes(const float* spikes, int numSpikes, unsigned redDimension)
 	{
 		GameObjectManager& objectManager = GetSpace()->GetObjectManager();
-		GameObject* gameController = new GameObject(*objectManager.GetArchetypeByName("GameController"));
+		GameObject* gameController = objectManager.GetObjectByName("GameController");
 		Behaviors::DimensionController& dimensionController = *static_cast<Behaviors::DimensionController*>(gameController->GetComponent("DimensionController"));
 
 		for (int i = 0; i < numSpikes * 2; i += 2)
@@ -439,7 +449,7 @@ namespace Levels
 	void Level1::AddBlueSpikes(const float* spikes, int numSpikes, unsigned blueDimension)
 	{
 		GameObjectManager& objectManager = GetSpace()->GetObjectManager();
-		GameObject* gameController = new GameObject(*objectManager.GetArchetypeByName("GameController"));
+		GameObject* gameController = objectManager.GetObjectByName("GameController");
 		Behaviors::DimensionController& dimensionController = *static_cast<Behaviors::DimensionController*>(gameController->GetComponent("DimensionController"));
 
 		for (int i = 0; i < numSpikes * 2; i += 2)

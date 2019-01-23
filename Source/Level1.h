@@ -36,21 +36,21 @@ class Tilemap;
 
 namespace Levels
 {
+	enum class Map : int
+	{
+		Arena3 = 0,
+		MediumBoy,
+		Channels,
+		Separation,
+		MAX_MAP
+	};
+
 	class Level1 : public Level
 	{
 	public:
 		//------------------------------------------------------------------------------
 		// Public Structures:
 		//------------------------------------------------------------------------------
-
-		enum class Map : int
-		{
-			Arena3 = 0,
-			MediumBoy,
-			Channels,
-			Separation,
-			MAX_MAP
-		};
 
 		//------------------------------------------------------------------------------
 		// Public Functions:
@@ -152,6 +152,8 @@ namespace Levels
 
 		unsigned columnsMap;
 		unsigned rowsMap;
+
+		bool firstFrame;
 	};
 }
 

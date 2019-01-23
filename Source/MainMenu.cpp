@@ -16,12 +16,19 @@
 #include "stdafx.h"
 #include "MainMenu.h"
 
-#include "Level1.h"
-
+// Systems
 #include "Archetypes.h"
 #include "Space.h"
-#include "SpriteText.h"
 #include <Input.h>
+#include <Graphics.h>
+#include <Camera.h>
+
+// Components
+#include "SpriteText.h"
+#include <Transform.h>
+
+// Levels
+#include "LevelSelect.h"
 
 //------------------------------------------------------------------------------
 // Public Functions:
@@ -46,7 +53,24 @@ namespace Levels
 	{
 		std::cout << "MainMenu::Initialize" << std::endl;
 
-		// GameObjectManager& objectManager = GetSpace()->GetObjectManager();
+		GameObjectManager& objectManager = GetSpace()->GetObjectManager();
+
+		// Create and add descriptive text
+		objectManager.AddArchetype(*Archetypes::CreateText());
+		GameObject* text = new GameObject(*objectManager.GetArchetypeByName("Text"));
+		static_cast<SpriteText*>(text->GetComponent("SpriteText"))->SetText("Yesterday's Mayonnaise");
+		static_cast<Transform*>(text->GetComponent("Transform"))->SetTranslation(Vector2D(0.0f, 50.0f));
+		objectManager.AddObject(*text);
+
+		text = new GameObject(*objectManager.GetArchetypeByName("Text"));
+		static_cast<SpriteText*>(text->GetComponent("SpriteText"))->SetText("Press space to go level select");
+		static_cast<Transform*>(text->GetComponent("Transform"))->SetTranslation(Vector2D(0.0f, -50.0f));
+		static_cast<Transform*>(text->GetComponent("Transform"))->SetScale(Vector2D(32.0f, 32.0f));
+		objectManager.AddObject(*text);
+
+		Camera& camera = Graphics::GetInstance().GetCurrentCamera();
+		camera.SetTranslation(Vector2D());
+		camera.SetDistance(60.0f);
 	}
 
 	// Update Level 1.
@@ -61,7 +85,7 @@ namespace Levels
 
 		if (input.CheckTriggered(' '))
 		{
-			GetSpace()->SetLevel(new Level1(Levels::Level1::Map::Arena3));
+			GetSpace()->SetLevel(new LevelSelect());
 		}
 	}
 
