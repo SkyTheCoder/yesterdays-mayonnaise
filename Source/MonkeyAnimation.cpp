@@ -120,7 +120,7 @@ namespace Behaviors
 	{
 		Vector2D velocity = physics->GetVelocity();
 		// If we are jumping/falling, use the jumping state.
-		if (monkeyMovement->airTime > 0.05f)
+		if (monkeyMovement->airTime > 0.1f)
 		{
 			nextState = State::StateJump;
 		}

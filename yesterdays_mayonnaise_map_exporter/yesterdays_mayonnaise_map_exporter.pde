@@ -1,4 +1,4 @@
-String mapName = "Tutorial";
+String mapName = "Arena3";
 
 color staticColor = color(0, 0, 0, 255);
 color staticSpikeColor = color(255, 0, 246, 255);

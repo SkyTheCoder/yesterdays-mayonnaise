@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 //
 // File Name:	Archetypes.h
-// Author(s):	Jeremy Kings (j.kings)
+// Author(s):	David Cohen (david.cohen), A.J. Bussman (anthony.bussman), Daniel Walther (daniel.walther)
 // Project:		BetaFramework
 // Course:		WANIC VGP2 2018-2019
 //
@@ -105,6 +105,14 @@ namespace Archetypes
 	// Returns:
 	//   A pointer to the newly constructed game archetype.
 	GameObject* CreateButtonArchetype(Mesh* mesh, SpriteSource* spriteSource);
+
+	// Create a fullscreen image archetype
+	// Params:
+	//   mesh = The mesh to use for the sprite.
+	//   spriteSource = The sprite source to use for the sprite.
+	// Returns:
+	//   A pointer to the newly constructed game archetype.
+	GameObject* CreateFullScreenImageArchetype(Mesh* mesh, SpriteSource* spriteSource);
 }
 
 //----------------------------------------------------------------------------

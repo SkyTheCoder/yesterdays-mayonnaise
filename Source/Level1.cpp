@@ -29,6 +29,7 @@
 #include <glfw3.h>
 #include "Tilemap.h"
 #include <Graphics.h>
+#include <Random.h>
 
 // Components
 #include "Sprite.h"
@@ -102,6 +103,12 @@ namespace Levels
 		textureCollectible = Texture::CreateTextureFromFile("Collectible.png");
 		spriteSourceCollectible = new SpriteSource(1, 1, textureCollectible);
 
+		// Load powerup assets
+		textureJumpBoost = Texture::CreateTextureFromFile("Spring.png");
+		textureSpeedBoost = Texture::CreateTextureFromFile("SpeedBoost.png");
+		spriteSourceJumpBoost = new SpriteSource(1, 1, textureJumpBoost);
+		spriteSourceSpeedBoost = new SpriteSource(1, 1, textureSpeedBoost);
+
 		// Load spike assets
 		meshSpikes = CreateQuadMesh(Vector2D(1.0f / columnsSpikes, 1.0f / rowsSpikes), Vector2D(0.5f, 0.5f));
 		textureSpikes = Texture::CreateTextureFromFile("Spikes.png");
@@ -169,6 +176,8 @@ namespace Levels
 		objectManager.AddArchetype(*Archetypes::CreateHazardArchetype("StaticSpike", meshSpikes, spriteSourceSpikes, 0));
 		objectManager.AddArchetype(*Archetypes::CreateHazardArchetype("RedSpike", meshSpikes, spriteSourceSpikes, 1));
 		objectManager.AddArchetype(*Archetypes::CreateHazardArchetype("BlueSpike", meshSpikes, spriteSourceSpikes, 2));
+		objectManager.AddArchetype(*Archetypes::CreateJumpBoostArchetype(meshGenericQuad, spriteSourceJumpBoost));
+		objectManager.AddArchetype(*Archetypes::CreateSpeedBoostArchetype(meshGenericQuad, spriteSourceSpeedBoost));
 
 		// Create the players and add them to the object manager.
 		GameObject* player = new GameObject(*objectManager.GetArchetypeByName("Player"));
@@ -268,9 +277,22 @@ namespace Levels
 					11.0f, 20.0f, 12.0f, 20.0f, 28.0f, 20.0f, 32.0f, 20.0f
 				};
 
+				float chipsSpawns[16] = {
+					10.0f, 2.0f, 30.0f, 2.0f, 2.0f, 6.0f, 42.0f, 6.0f, 18.0f, 10.0f, 26.0f, 10.0f, 6.0f, 18.0f, 38.0f, 18.0f
+				};
+
+				float powerups[16] = {
+					6.0f, 2.0f, 22.0f, 2.0f, 46.0f, 2.0f, 10.0f, 10.0f, 2.0f, 14.0f, 30.0f, 14.0f, 18.0f, 18.0f, 42.0f, 18.0f
+				};
+
 				AddStaticSpikes(staticSpikes, 84);
 				AddRedSpikes(redSpikes, 47, redDimension);
 				AddBlueSpikes(blueSpikes, 36, blueDimension);
+				AddChips(chipsSpawns, 8);
+				AddPowerups(powerups, 8);
+
+				static_cast<Transform*>(player->GetComponent("Transform"))->SetTranslation(Vector2D(600.0f, -1500.0f));
+				static_cast<Transform*>(player2->GetComponent("Transform"))->SetTranslation(Vector2D(4200.0f, -1500.0f));
 
 				break;
 			}
@@ -297,10 +319,15 @@ namespace Levels
 					4.0f, 6.0f, 27.0f, 6.0f, 2.0f, 16.0f, 29.0f, 16.0f, 10.0f, 21.0f, 21.0f, 21.0f, 2.0f, 28.0f, 29.0f, 28.0f
 				};
 
+				float powerups[10] = {
+					9.0f, 12.0f, 22.0f, 12.0f, 15.5f, 16.0f, 11.0f, 29.0f, 20.0f, 29.0f
+				};
+
 				AddStaticSpikes(staticSpikes, 30);
 				AddRedSpikes(redSpikes, 33, redDimension);
 				AddBlueSpikes(blueSpikes, 33, blueDimension);
 				AddChips(chipsSpawns, 8);
+				AddPowerups(powerups, 5);
 
 				static_cast<Transform*>(player->GetComponent("Transform"))->SetTranslation(Vector2D(900.0f, -300.0f));
 				static_cast<Transform*>(player2->GetComponent("Transform"))->SetTranslation(Vector2D(2200.0f, -200.0f));
@@ -329,10 +356,15 @@ namespace Levels
 					6.0f, 6.0f, 25.0f, 6.0f, 4.0f, 21.0f, 27.0f, 21.0f
 				};
 
+				float powerups[12] = {
+					1.0f, 16.0f, 13.0f, 16.0f, 18.0f, 16.0f, 30.0f, 16.0f, 3.0f, 28.0f, 28.0f, 28.0f
+				};
+
 				AddStaticSpikes(staticSpikes, 34);
 				AddRedSpikes(redSpikes, 21, redDimension);
 				AddBlueSpikes(blueSpikes, 21, blueDimension);
 				AddChips(chipsSpawns, 4);
+				AddPowerups(powerups, 6);
 
 				static_cast<Transform*>(player->GetComponent("Transform"))->SetTranslation(Vector2D(600.0f, -2600.0f));
 				static_cast<Transform*>(player2->GetComponent("Transform"))->SetTranslation(Vector2D(2300.0f, -2700.0f));
@@ -358,10 +390,15 @@ namespace Levels
 					11.0f, 11.0f, 20.0f, 11.0f, 5.0f, 20.0f, 26.0f, 20.0f
 				};
 
+				float powerups[12] = {
+					3.0f, 8.0f, 28.0f, 8.0f, 14.0f, 16.0f, 17.0f, 16.0f, 1.0f, 29.0f, 30.0f, 29.0f
+				};
+
 				AddStaticSpikes(staticSpikes, 32);
 				AddRedSpikes(redSpikes, 8, redDimension);
 				AddBlueSpikes(blueSpikes, 16, blueDimension);
 				AddChips(chipsSpawns, 4);
+				AddPowerups(powerups, 6);
 
 				static_cast<Transform*>(player->GetComponent("Transform"))->SetTranslation(Vector2D(300.0f, -200.0f));
 				static_cast<Transform*>(player2->GetComponent("Transform"))->SetTranslation(Vector2D(2800.0f, -200.0f));
@@ -463,6 +500,10 @@ namespace Levels
 		delete meshSpikes;
 		delete spriteSourceCollectible;
 		delete textureCollectible;
+		delete textureJumpBoost;
+		delete textureSpeedBoost;
+		delete spriteSourceJumpBoost;
+		delete spriteSourceSpeedBoost;
 		delete spriteSourceCat;
 		delete textureCat;
 		delete meshCat;
@@ -558,7 +599,7 @@ namespace Levels
 
 		for (int i = 0; i < numPowerups * 2; i += 2)
 		{
-			GameObject* powerup = new GameObject(*objectManager.GetArchetypeByName("Powerup"));
+			GameObject* powerup = new GameObject(*objectManager.GetArchetypeByName(RandomRange(0, 1) ? "JumpBoost" : "SpeedBoost"));
 			static_cast<Transform*>(powerup->GetComponent("Transform"))->SetTranslation(Vector2D(powerups[i] * 100.0f, powerups[i + 1] * -100.0f));
 			objectManager.AddObject(*powerup);
 		}

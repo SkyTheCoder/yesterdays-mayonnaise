@@ -38,7 +38,11 @@ namespace Levels
 {
 	enum class Map : int
 	{
-		Tutorial = 0,
+		MainMenu = 0,
+		ControlScreen,
+		Credits,
+		LevelSelect,
+		Tutorial,
 		Arena3,
 		MediumBoy,
 		Channels,
@@ -138,6 +142,12 @@ namespace Levels
 		// Collectible
 		Texture* textureCollectible;
 		SpriteSource* spriteSourceCollectible;
+
+		// Powerups
+		Texture* textureJumpBoost;
+		Texture* textureSpeedBoost;
+		SpriteSource* spriteSourceJumpBoost;
+		SpriteSource* spriteSourceSpeedBoost;
 
 		// Spikes
 		Texture* textureSpikes;

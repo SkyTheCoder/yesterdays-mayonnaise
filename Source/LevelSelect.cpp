@@ -83,6 +83,7 @@ namespace Levels
 		AddMapButton("MediumBoy", Vector2D(-175.0f, 50.0f), Levels::Map::MediumBoy);
 		AddMapButton("Channels", Vector2D(175.0f, 50.0f), Levels::Map::Channels);
 		AddMapButton("Separation", Vector2D(-175.0f, -50.0f), Levels::Map::Separation);
+		AddMapButton("Main Menu", Vector2D(0.0f, -250.0f), Levels::Map::MainMenu);
 
 		Camera& camera = Graphics::GetInstance().GetCurrentCamera();
 		camera.SetTranslation(Vector2D());

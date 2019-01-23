@@ -115,7 +115,7 @@ namespace Behaviors
 		playerID(0), chips(0),
 		onGround(false), onLeftWall(false), onRightWall(false),
 		hasJumped(false), airTime(0.0f), leftTime(0.0f), rightTime(0.0f), movementLerpGround(0.95f), movementLerpAir(0.8f),
-		powerUp(POWER_UP_NONE), PUTimer(0.0f), PUMaxTime(5.0f), jumpBoost(0.0f, 950.0f), speedBoost(425.0f)
+		powerUp(POWER_UP_NONE), PUTimer(0.0f), PUMaxTime(10.0f), jumpBoost(0.0f, 950.0f), speedBoost(425.0f)
 	{
 	}
 

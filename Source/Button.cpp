@@ -14,20 +14,28 @@
 //------------------------------------------------------------------------------
 
 #include "stdafx.h"
+
 #include "Button.h"
 
-#include "Sprite.h"
-#include "Transform.h"
+// Systems
 #include "ColliderRectangle.h"
 #include <GameObject.h>
 #include <Intersection2D.h>
-
 #include <Input.h>
 #include <Vector2D.h>
 #include <Graphics.h>
 #include <Space.h>
 
+// Components
+#include "Sprite.h"
+#include "Transform.h"
+
+// Levels
 #include "Level1.h"
+#include "MainMenu.h"
+#include "Controls.h"
+#include "Credit.h"
+#include "LevelSelect.h"
 
 //------------------------------------------------------------------------------
 // Public Structures:
@@ -72,13 +80,31 @@ namespace Behaviors
 
 		if (PointRectangleIntersection(mousePos, boundingRact))
 		{
-			sprite->SetColor(Color(0.8f, 0.8f, 0.8f));
+			sprite->SetColor(Color(0.4f, 0.4f, 0.4f));
 			if (input.CheckTriggered(VK_LBUTTON))
-				GetOwner()->GetSpace()->SetLevel(new Levels::Level1(map));
+			{
+				switch (map)
+				{
+				case Levels::Map::MainMenu:
+					GetOwner()->GetSpace()->SetLevel(new Levels::MainMenu());
+					break;
+				case Levels::Map::ControlScreen:
+					GetOwner()->GetSpace()->SetLevel(new Levels::Controls());
+					break;
+				case Levels::Map::Credits:
+					GetOwner()->GetSpace()->SetLevel(new Levels::Credit());
+					break;
+				case Levels::Map::LevelSelect:
+					GetOwner()->GetSpace()->SetLevel(new Levels::LevelSelect());
+					break;
+				default:
+					GetOwner()->GetSpace()->SetLevel(new Levels::Level1(map));
+				}
+			}
 		}
 		else
 		{
-			sprite->SetColor(Colors::White);
+			sprite->SetColor(Color(0.7f, 0.7f, 0.7f));
 		}
 	}
 

@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 //
 // File Name:	Archetypes.cpp
-// Author(s):	David Cohen (david.cohen)
+// Author(s):	David Cohen (david.cohen), A.J. Bussman (anthony.bussman), Daniel Walther (daniel.walther)
 // Project:		BetaFramework
 // Course:		WANIC VGP2 2018-2019
 //
@@ -250,7 +250,7 @@ namespace Archetypes
 
 		// Create transform
 		Transform* transform = new Transform();
-		transform->SetScale(Vector2D(50.0f, 50.0f));
+		transform->SetScale(Vector2D(100.0f, 100.0f));
 
 		// Create sprite
 		Sprite* sprite = new Sprite();
@@ -280,7 +280,7 @@ namespace Archetypes
 
 		// Create transform
 		Transform* transform = new Transform();
-		transform->SetScale(Vector2D(50.0f, 50.0f));
+		transform->SetScale(Vector2D(100.0f, 100.0f));
 
 		// Create sprite
 		Sprite* sprite = new Sprite();
@@ -330,6 +330,28 @@ namespace Archetypes
 		Button->AddComponent(button);
 
 		return Button;
+	}
+
+	// Create a fullscreen image archetype
+	// Params:
+	//   mesh = The mesh to use for the sprite.
+	//   spriteSource = The sprite source to use for the sprite.
+	// Returns:
+	//   A pointer to the newly constructed game archetype.
+	GameObject* CreateFullScreenImageArchetype(Mesh* mesh, SpriteSource* spriteSource)
+	{
+		GameObject* gameObject = new GameObject("FullScreenImage");
+
+		// Create a new transform.
+		gameObject->AddComponent(new Transform(Vector2D(), Vector2D(800.0f, 600.0f)));
+
+		// Create a new sprite.
+		Sprite* sprite = new Sprite();
+		sprite->SetMesh(mesh);
+		sprite->SetSpriteSource(spriteSource);
+		gameObject->AddComponent(sprite);
+
+		return gameObject;
 	}
 }
 

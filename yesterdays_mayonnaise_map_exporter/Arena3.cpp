@@ -46,3 +46,25 @@ for (int i = 0; i < 72; i += 2)
 	objectManager.AddObject(*spike);
 }
 
+float chipsSpawns[16] = {
+	10.0f, 2.0f, 30.0f, 2.0f, 2.0f, 6.0f, 42.0f, 6.0f, 18.0f, 10.0f, 26.0f, 10.0f, 6.0f, 18.0f, 38.0f, 18.0f
+};
+
+for (int i = 0; i < 16; i += 2)
+{
+	GameObject* chips = new GameObject(*objectManager.GetArchetypeByName("Collectible"));
+	static_cast<Transform*>(chips->GetComponent("Transform"))->SetTranslation(Vector2D(chipsSpawns[i] * 100.0f, chipsSpawns[i + 1] * -100.0f));
+	objectManager.AddObject(*chips);
+}
+
+float powerups[16] = {
+	6.0f, 2.0f, 22.0f, 2.0f, 46.0f, 2.0f, 10.0f, 10.0f, 2.0f, 14.0f, 30.0f, 14.0f, 18.0f, 18.0f, 42.0f, 18.0f
+};
+
+for (int i = 0; i < 16; i += 2)
+{
+	GameObject* powerup = new GameObject(*objectManager.GetArchetypeByName("Powerup"));
+	static_cast<Transform*>(powerup->GetComponent("Transform"))->SetTranslation(Vector2D(powerups[i] * 100.0f, powerups[i + 1] * -100.0f));
+	objectManager.AddObject(*powerup);
+}
+

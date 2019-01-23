@@ -19,11 +19,21 @@
 #include "Level.h"
 
 //------------------------------------------------------------------------------
+// Forward References:
+//------------------------------------------------------------------------------
+
+class Texture;
+class Mesh;
+class SpriteSource;
+
+//------------------------------------------------------------------------------
 // Public Structures:
 //------------------------------------------------------------------------------
 
 namespace Levels
 {
+	enum class Map : int;
+
 	class MainMenu : public Level
 	{
 	public:
@@ -47,6 +57,30 @@ namespace Levels
 
 		// Unload the resources associated with MainMenu.
 		void Unload() override;
+
+	private:
+		//------------------------------------------------------------------------------
+		// Private Functions:
+		//------------------------------------------------------------------------------
+
+		// Adds a new map button.
+		// name = The name of the level.
+		// position = The position of the button.
+		// map = The map the button should switch to.
+		void AddMapButton(const char* name, Vector2D position, Levels::Map map);
+
+		//------------------------------------------------------------------------------
+		// Private Variables:
+		//------------------------------------------------------------------------------
+
+		// Button
+		Mesh* meshButton;
+		Texture* textureButton;
+		SpriteSource* spriteSourceButton;
+
+		Mesh* meshBackground;
+		Texture* textureBackground;
+		SpriteSource* spriteSourceBackground;
 	};
 }
 
