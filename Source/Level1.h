@@ -47,6 +47,7 @@ namespace Levels
 		MediumBoy,
 		Channels,
 		Separation,
+		Descent,
 		MAX_MAP
 	};
 

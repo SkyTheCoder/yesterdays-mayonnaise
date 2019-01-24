@@ -133,6 +133,9 @@ namespace Levels
 		case Map::Separation:
 			mapName = "Separation";
 			break;
+		case Map::Descent:
+			mapName = "Descent";
+			break;
 		}
 		
 		dataStaticMap = Tilemap::CreateTilemapFromFile("Assets/Levels/" + mapName + "Static.txt");
@@ -402,6 +405,30 @@ namespace Levels
 
 				static_cast<Transform*>(player->GetComponent("Transform"))->SetTranslation(Vector2D(300.0f, -200.0f));
 				static_cast<Transform*>(player2->GetComponent("Transform"))->SetTranslation(Vector2D(2800.0f, -200.0f));
+
+				break;
+			}
+			case Map::Descent:
+			{
+				float staticSpikes[44] = {
+					1.0f, 47.0f, 2.0f, 47.0f, 3.0f, 47.0f, 4.0f, 47.0f, 5.0f, 47.0f, 6.0f, 47.0f, 7.0f, 47.0f, 8.0f, 47.0f, 9.0f, 47.0f, 10.0f, 47.0f, 11.0f, 47.0f, 12.0f, 47.0f, 13.0f, 47.0f, 14.0f, 47.0f, 15.0f, 47.0f, 16.0f, 47.0f,
+					17.0f, 47.0f, 18.0f, 47.0f, 19.0f, 47.0f, 20.0f, 47.0f, 21.0f, 47.0f, 22.0f, 47.0f
+				};
+
+				float chipsSpawns[18] = {
+					17.0f, 7.0f, 21.0f, 10.0f, 6.0f, 12.0f, 5.0f, 21.0f, 18.0f, 21.0f, 13.0f, 27.0f, 14.0f, 32.0f, 9.0f, 43.0f, 20.0f, 43.0f
+				};
+
+				float powerups[12] = {
+					19.0f, 14.0f, 3.0f, 16.0f, 20.0f, 30.0f, 2.0f, 32.0f, 18.0f, 38.0f, 5.0f, 42.0f
+				};
+
+				AddStaticSpikes(staticSpikes, 22);
+				AddChips(chipsSpawns, 8);
+				AddPowerups(powerups, 6);
+
+				static_cast<Transform*>(player->GetComponent("Transform"))->SetTranslation(Vector2D(500.0f, -400.0f));
+				static_cast<Transform*>(player2->GetComponent("Transform"))->SetTranslation(Vector2D(1500.0f, -400.0f));
 
 				break;
 			}

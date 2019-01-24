@@ -87,6 +87,8 @@ namespace Behaviors
 	void ChipCollectible::SetActive(bool active_)
 	{
 		active = active_;
+		if (!active)
+			timer = 0;
 	}
 }
 

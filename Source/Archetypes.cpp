@@ -192,7 +192,7 @@ namespace Archetypes
 		GameObject* gameController = new GameObject("GameController");
 
 		// Create a new CameraFollow.
-		gameController->AddComponent(new Behaviors::CameraFollow(Vector2D(100.0f, 125.0f), 0.98f));
+		gameController->AddComponent(new Behaviors::CameraFollow(Vector2D(100.0f, 200.0f), 0.98f));
 
 		// Create a new DimensionController.
 		gameController->AddComponent(new Behaviors::DimensionController());
